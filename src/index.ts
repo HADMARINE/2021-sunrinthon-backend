@@ -42,10 +42,7 @@ const STARTUP_EXECUTES = [checkInitializeProjectSettings, cron, connectDB];
 export function Root(port = PORT): ReturnType<typeof ServerStarter> {
   const server = ServerStarter({
     port,
-    routePath:
-      process.env.NODE_ENV === 'production'
-        ? `${process.cwd()}/routes`
-        : `${process.cwd()}/src/routes`,
+    routePath: `${process.cwd()}/routes`,
     requestHandlers: REQUEST_HANDLERS,
     executes: STARTUP_EXECUTES,
     portStrict: process.env.PORT_STRICT === 'true' ? true : false,
