@@ -1,7 +1,12 @@
 import ErrorDictionary from '@error/ErrorDictionary';
 import ApplyRepository from '@repo/ApplyRepository';
 import { UploadedFile } from 'express-fileupload';
-import { Controller, DataTypes, WrappedRequest } from 'express-quick-builder';
+import {
+  Controller,
+  DataTypes,
+  PostMapping,
+  WrappedRequest,
+} from 'express-quick-builder';
 
 interface ApplyControllerInterface {
   postApply(req: WrappedRequest): Promise<void>;
@@ -11,6 +16,7 @@ const applyRepository = new ApplyRepository();
 
 @Controller
 export default class ApplyController implements ApplyControllerInterface {
+  @PostMapping()
   async postApply(req: WrappedRequest): Promise<void> {
     const { studentid, name, teamname, position } = req.verify.body({
       studentid: DataTypes.string,
@@ -24,12 +30,18 @@ export default class ApplyController implements ApplyControllerInterface {
       throw ErrorDictionary.data.parameterNull('portfolio (file)');
     }
 
-    applyRepository.postApply({
+    const result = await applyRepository.postApply({
       studentId: studentid,
       name,
       teamName: teamname,
       position,
       portfolio,
     });
+
+    if (result) {
+      return;
+    } else {
+      throw ErrorDictionary.db.create(`apply`);
+    }
   }
 }

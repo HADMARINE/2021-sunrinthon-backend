@@ -1,9 +1,9 @@
+import ErrorDictionary from '@error/ErrorDictionary';
 import Apply, { ApplyInterface } from '@models/Apply';
 import { QueryBuilder } from '@util/Assets';
 import Aws from '@util/Aws';
 import { UploadedFile } from 'express-fileupload';
 import moment from 'moment';
-import { ObjectId } from 'mongoose';
 
 interface ApplyRepositoryInterface {
   postApply(data: {
@@ -23,16 +23,16 @@ interface ApplyRepositoryInterface {
     }>,
   ): Promise<ApplyInterface[]>;
 
-  getApplyOne(data: { _id: ObjectId }): Promise<ApplyInterface | null>;
+  getApplyOne(data: { _id: string }): Promise<ApplyInterface | null>;
 
   updateApply(data: {
-    _id: ObjectId;
+    _id: string;
     document: Partial<ApplyInterface>;
   }): Promise<ApplyInterface | null>;
 
-  deleteApply(data: { _id: ObjectId }): Promise<boolean>;
+  deleteApply(data: { _id: string }): Promise<boolean>;
 
-  deleteApplyMany(data: { _id: ObjectId[] }): Promise<number>;
+  deleteApplyMany(data: { _id: string[] }): Promise<number>;
 }
 
 export default class ApplyRepository implements ApplyRepositoryInterface {
@@ -46,10 +46,16 @@ export default class ApplyRepository implements ApplyRepositoryInterface {
     try {
       const portFile = data.portfolio;
 
+      if (!portFile.name.endsWith('pdf')) {
+        throw ErrorDictionary.data.parameterInvalid(
+          'portfolio (must end with .pdf)',
+        );
+      }
+
       const portResult = await Aws.S3.upload({
         Bucket: '2021-sunrinton-files',
-        Key: `apply_files/${data.teamName}_${portFile.name}_${moment().format(
-          `YYYY-MM-DD_HH_mm_ss`,
+        Key: `apply_files/${moment().format(
+          `YYYY-MM-DD_HH_mm_ss_${data.teamName}_${portFile.name}`,
         )}`,
         Body: portFile.data,
       });
@@ -86,25 +92,25 @@ export default class ApplyRepository implements ApplyRepositoryInterface {
     return apply;
   }
 
-  async getApplyOne(data: { _id: ObjectId }): Promise<ApplyInterface | null> {
+  async getApplyOne(data: { _id: string }): Promise<ApplyInterface | null> {
     const apply = await Apply.findById(data._id).exec();
     return apply;
   }
 
   async updateApply(data: {
-    _id: ObjectId;
+    _id: string;
     document: Partial<ApplyInterface>;
   }): Promise<ApplyInterface | null> {
-    const apply = await Apply.findOneAndUpdate(data._id, document);
+    const apply = await Apply.findByIdAndUpdate(data._id, document);
     return apply;
   }
 
-  async deleteApply(data: { _id: ObjectId }): Promise<boolean> {
+  async deleteApply(data: { _id: string }): Promise<boolean> {
     const apply = await Apply.findByIdAndDelete(data._id).exec();
     return apply ? true : false;
   }
 
-  async deleteApplyMany(data: { _id: ObjectId[] }): Promise<number> {
+  async deleteApplyMany(data: { _id: string[] }): Promise<number> {
     const apply = await Apply.deleteMany({ _id: { $or: data._id } }).exec();
     return apply.deletedCount || 0;
   }

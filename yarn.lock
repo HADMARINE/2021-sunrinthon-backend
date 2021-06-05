@@ -3370,10 +3370,10 @@ express-ipfilter@^1.1.2:
     proxy-addr "^2.0.4"
     range_check "^1.2.0"
 
-express-quick-builder@^1.1.10:
-  version "1.1.10"
-  resolved "https://registry.yarnpkg.com/express-quick-builder/-/express-quick-builder-1.1.10.tgz#129bcd10401f251ec4005ee6906ea47bb79c64b3"
-  integrity sha512-Act9JcuAtFkUkizvTb5jWYIxc3aTuk7JOZxQgdA0N+EG6aExjr8vJIKmABfcBO3VOT8YrZppVPyjnZ7C52hfSg==
+express-quick-builder@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/express-quick-builder/-/express-quick-builder-1.2.0.tgz#80a6776bf953ef7ab2d2dc5f11d0ea6880733144"
+  integrity sha512-sElx2cNe3QFNuLaTYzyVh4LuPsFO7FF3w+F8qg1OfI5/W8qO6l8vvwS6H9L08OKFYe78FPwVD8kHonJNyIaDVQ==
   dependencies:
     clear-logger "^1.0.3"
     express "^4.17.1"

@@ -33,8 +33,8 @@ const REQUEST_HANDLERS = [
     debug: process.env.NODE_ENV === 'development',
   }),
   express.static('public'),
-  express.json({ limit: '25mb' }),
-  express.urlencoded({ extended: true, limit: '25mb' }),
+  express.json({ limit: '100mb' }),
+  express.urlencoded({ extended: true, limit: '100mb' }),
 ];
 
 const STARTUP_EXECUTES = [checkInitializeProjectSettings, cron, connectDB];
@@ -44,11 +44,16 @@ export function Root(port = PORT): ReturnType<typeof ServerStarter> {
     port,
     routePath:
       process.env.NODE_ENV === 'development'
-        ? `${process.cwd()}/routes`
+        ? `${process.cwd()}/src/routes`
         : `${process.cwd()}/dist/routes`,
     requestHandlers: REQUEST_HANDLERS,
     executes: STARTUP_EXECUTES,
-    portStrict: process.env.PORT_STRICT === 'true' ? true : false,
+    portStrict:
+      process.env.NODE_ENV === 'production'
+        ? true
+        : process.env.PORT_STRICT === 'true'
+        ? true
+        : false,
     appName: packageJson.name,
   });
   io(server.server);

@@ -19,6 +19,7 @@ export default class TimeController implements TimeControllerInterface {
     const time = await Time.findOneAndUpdate(
       { type: 'hackathon' },
       { $set: { value } },
+      { upsert: true },
     ).exec();
   }
 
@@ -28,6 +29,7 @@ export default class TimeController implements TimeControllerInterface {
     const time = await Time.findOneAndUpdate(
       { type: 'market' },
       { $set: { value } },
+      { upsert: true },
     ).exec();
   }
 }

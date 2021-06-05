@@ -5,9 +5,10 @@ import {
   AllMapping,
   Controller,
   DataTypes,
+  DeleteMapping,
   GetMapping,
+  PatchMapping,
   PostMapping,
-  SetSuccessMessage,
   WrappedRequest,
 } from 'express-quick-builder';
 
@@ -25,14 +26,12 @@ export default class AdminApplyController
   @GetMapping(':docid')
   async getApplyOne(req: WrappedRequest): Promise<ApplyInterface | null> {
     const { docid } = req.verify.params({ docid: DataTypes.string });
-    console.log(docid);
-    // return await applyRepository.getApplyOne();
-    return null;
+    return await applyRepository.getApplyOne({ _id: docid });
   }
 
   @GetMapping()
   async getApply(req: WrappedRequest): Promise<ApplyInterface[]> {
-    const { from, to, teamname, name } = req.verify.body({
+    const { from, to, teamname, name } = req.verify.query({
       from: DataTypes.numberNull,
       to: DataTypes.numberNull,
       teamname: DataTypes.stringNull,
@@ -44,5 +43,14 @@ export default class AdminApplyController
       teamName: teamname,
       name,
     });
+  }
+
+  @DeleteMapping()
+  async deleteApply(req: WrappedRequest): Promise<null | void> {
+    const { docid } = req.verify.body({
+      docid: DataTypes.string,
+    });
+    const result = await applyRepository.deleteApply({ _id: docid });
+    return result ? undefined : null;
   }
 }
