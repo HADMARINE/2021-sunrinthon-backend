@@ -9,11 +9,11 @@ function createServer(): http.Server {
   return rootInstance.server;
 }
 
-async function closeServer(
+function closeServer(
   done: any = function (): void {
     return;
   },
-): Promise<void> {
+): void {
   if (!rootInstance) throw new Error('Root instance is not initialized!');
   rootInstance.server.close();
   rootInstance = undefined;

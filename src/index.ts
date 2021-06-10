@@ -43,7 +43,7 @@ export function Root(port = PORT): ReturnType<typeof ServerStarter> {
   const server = ServerStarter({
     port,
     routePath:
-      process.env.NODE_ENV === 'development'
+      process.env.NODE_ENV !== 'production'
         ? `${process.cwd()}/src/routes`
         : `${process.cwd()}/dist/routes`,
     requestHandlers: REQUEST_HANDLERS,
