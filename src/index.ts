@@ -13,7 +13,12 @@ import fileUploader from 'express-fileupload';
 import express from 'express';
 import packageJson from '../package.json';
 
-const PORT: number = parseInt(process.env.PORT || '4000', 10);
+const PORT: number = parseInt(
+  process.env.NODE_ENV === 'production'
+    ? process.env.PROD_PORT || '4000'
+    : process.env.DEV_PORT || '4000',
+  10,
+);
 
 const REQUEST_HANDLERS = [
   morgan(),
