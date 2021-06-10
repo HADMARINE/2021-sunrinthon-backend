@@ -1,6 +1,5 @@
 import error from '@error/ErrorDictionary';
 import { RequestHandler, NextFunction, Response, Request } from 'express';
-import deasync from 'deasync';
 import logger from 'clear-logger';
 import fs from 'fs';
 import path from 'path';
@@ -91,7 +90,7 @@ function filterType<T>(param: any, type: string): T | undefined {
   if (typeof param !== type && typeof param !== 'undefined') {
     if (type === 'number') {
       try {
-        return (parseInt(param, 10) as unknown) as T;
+        return parseInt(param, 10) as unknown as T;
       } catch {}
     }
     throw error.data.parameterInvalid();
@@ -159,55 +158,55 @@ export function QueryBuilder<T>(
   }
 }
 
-const DEFAULT_TIMEOUTS = 10 * 1000;
+// const DEFAULT_TIMEOUTS = 10 * 1000;
 
-const STATE = {
-  INITIAL: 'INITIAL',
-  RESOLVED: 'RESOLVED',
-  REJECTED: 'REJECTED',
-};
+// const STATE = {
+//   INITIAL: 'INITIAL',
+//   RESOLVED: 'RESOLVED',
+//   REJECTED: 'REJECTED',
+// };
 
-const DEFAULT_TICK = 100;
+// const DEFAULT_TICK = 100;
 
-function syncifyFunction<T>(
-  func: Function,
-  options: { timeout?: number; tick?: number } = {},
-): any {
-  logger.error('syncifyFunction is currently not working properly!');
-  return (...args: any[]) => {
-    let promiseError;
-    let promiseValue;
-    let promiseStatus = STATE.INITIAL;
-    const timeouts = options.timeout || DEFAULT_TIMEOUTS;
-    const tick = options.tick || DEFAULT_TICK;
+// function syncifyFunction<T>(
+//   func: Function,
+//   options: { timeout?: number; tick?: number } = {},
+// ): any {
+//   logger.error('syncifyFunction is currently not working properly!');
+//   return (...args: any[]) => {
+//     let promiseError;
+//     let promiseValue;
+//     let promiseStatus = STATE.INITIAL;
+//     const timeouts = options.timeout || DEFAULT_TIMEOUTS;
+//     const tick = options.tick || DEFAULT_TICK;
 
-    func(...args)
-      .then((value: T) => {
-        console.log(value);
-        promiseValue = value;
-        promiseStatus = STATE.RESOLVED;
-      })
-      .catch((e: any) => {
-        console.log(e);
-        promiseError = e;
-        promiseStatus = STATE.REJECTED;
-      });
+//     func(...args)
+//       .then((value: T) => {
+//         console.log(value);
+//         promiseValue = value;
+//         promiseStatus = STATE.RESOLVED;
+//       })
+//       .catch((e: any) => {
+//         console.log(e);
+//         promiseError = e;
+//         promiseStatus = STATE.REJECTED;
+//       });
 
-    const waitUntil = new Date(new Date().getTime() + timeouts);
-    while (waitUntil > new Date() && promiseStatus === STATE.INITIAL) {
-      console.log(promiseStatus, waitUntil, promiseValue, promiseError);
-      deasync.sleep(tick);
-    }
+//     const waitUntil = new Date(new Date().getTime() + timeouts);
+//     while (waitUntil > new Date() && promiseStatus === STATE.INITIAL) {
+//       console.log(promiseStatus, waitUntil, promiseValue, promiseError);
+//       deasync.sleep(tick);
+//     }
 
-    if (promiseStatus === STATE.RESOLVED) {
-      return promiseValue;
-    } else if (promiseStatus === STATE.REJECTED) {
-      throw promiseError;
-    } else {
-      throw new Error(`${func.name} called timeout`);
-    }
-  };
-}
+//     if (promiseStatus === STATE.RESOLVED) {
+//       return promiseValue;
+//     } else if (promiseStatus === STATE.REJECTED) {
+//       throw promiseError;
+//     } else {
+//       throw new Error(`${func.name} called timeout`);
+//     }
+//   };
+// }
 
 function dirCollector(dirname: string): Record<string, any> {
   const dirs: string[] = fs.readdirSync(dirname);
@@ -259,7 +258,7 @@ export default {
   wrapper,
   returnArray,
   returnRecord,
-  syncifyFunction,
+  // syncifyFunction,
   data: {
     verify: {
       email: verifyEmail,
