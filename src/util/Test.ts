@@ -2,7 +2,7 @@ import { Root } from '../index';
 import http from 'http';
 import ServerBuilder from 'express-quick-builder';
 
-let rootInstance: ReturnType<typeof ServerBuilder> | undefined;
+let rootInstance: ReturnType<typeof ServerBuilder['serverStarter']> | undefined;
 
 function createServer(): http.Server {
   rootInstance = Root(63000);

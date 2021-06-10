@@ -8,6 +8,7 @@ export interface ApplyInterface {
   name: string;
   teamName: string;
   position: string;
+  clothSize: string;
   portfolio: { Bucket: string; Key: string };
 }
 
@@ -16,6 +17,7 @@ const ApplySchema: Schema = new Schema({
   name: { type: String, required: true },
   teamName: { type: String, required: true },
   position: { type: String, required: true },
+  clothSize: { type: String, required: true },
   portfolio: {
     type: {
       Bucket: { type: String, required: true },
