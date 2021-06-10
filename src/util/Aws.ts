@@ -1,7 +1,6 @@
 import AWS from 'aws-sdk';
 import error from '@error/ErrorDictionary';
 import { ManagedUpload } from 'aws-sdk/lib/s3/managed_upload';
-import deasync from 'deasync';
 
 type SESParam = {
   address: {
