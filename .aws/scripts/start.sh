@@ -1,3 +1,3 @@
 cd /home/ubuntu/app
-pm2 start
+yarn start
 cd ..
