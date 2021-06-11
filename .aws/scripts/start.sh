@@ -1,3 +1,5 @@
 cd /home/ubuntu/app
-yarn start
+yarn install
+yarn build
+pm2 start
 cd ..
