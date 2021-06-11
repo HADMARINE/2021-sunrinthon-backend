@@ -12,6 +12,7 @@ interface ApplyRepositoryInterface {
     teamName: string;
     position: string;
     portfolio: UploadedFile;
+    clothSize: string;
   }): Promise<boolean>;
 
   getApply(
@@ -42,6 +43,7 @@ export default class ApplyRepository implements ApplyRepositoryInterface {
     teamName: string;
     position: string;
     portfolio: UploadedFile;
+    clothSize: string;
   }): Promise<boolean> {
     try {
       const portFile = data.portfolio;
@@ -66,6 +68,7 @@ export default class ApplyRepository implements ApplyRepositoryInterface {
         teamName: data.teamName,
         position: data.position,
         portfolio: { Key: portResult.Key, Bucket: portResult.Bucket },
+        clothSize: data.clothSize,
       });
 
       return true;
