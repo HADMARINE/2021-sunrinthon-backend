@@ -1,6 +1,6 @@
 import ErrorDictionary from '@error/ErrorDictionary';
 import Apply, { ApplyInterface } from '@models/Apply';
-import { QueryBuilder } from '@util/Assets';
+import Assets, { QueryBuilder } from '@util/Assets';
 import Aws from '@util/Aws';
 import { UploadedFile } from 'express-fileupload';
 import moment from 'moment';
@@ -13,12 +13,13 @@ interface ApplyRepositoryInterface {
     position: string;
     portfolio: UploadedFile;
     clothSize: string;
+    phoneNumber: string;
   }): Promise<boolean>;
 
   getApply(
     data: Nullish<{
-      from: number;
-      to: number;
+      start: number;
+      amount: number;
       teamName: string;
       name: string;
     }>,
@@ -44,43 +45,44 @@ export default class ApplyRepository implements ApplyRepositoryInterface {
     position: string;
     portfolio: UploadedFile;
     clothSize: string;
+    phoneNumber: string;
   }): Promise<boolean> {
-    try {
-      const portFile = data.portfolio;
-
-      if (!portFile.name.endsWith('pdf')) {
-        throw ErrorDictionary.data.parameterInvalid(
-          'portfolio (must end with .pdf)',
-        );
-      }
-
-      const portResult = await Aws.S3.upload({
-        Bucket: '2021-sunrinton-files',
-        Key: `apply_files/${moment().format(
-          `YYYY-MM-DD_HH_mm_ss_${data.teamName}_${portFile.name}`,
-        )}`,
-        Body: portFile.data,
-      });
-
-      await Apply.create({
-        studentId: data.studentId,
-        name: data.name,
-        teamName: data.teamName,
-        position: data.position,
-        portfolio: { Key: portResult.Key, Bucket: portResult.Bucket },
-        clothSize: data.clothSize,
-      });
-
-      return true;
-    } catch {
-      return false;
+    if (!Assets.data.verify.phone(data.phoneNumber)) {
+      throw ErrorDictionary.data.parameterInvalid(`phonenumber`);
     }
+
+    const portFile = data.portfolio;
+
+    if (!portFile.name.endsWith('pdf')) {
+      throw ErrorDictionary.data.parameterInvalid(
+        'portfolio (must end with .pdf)',
+      );
+    }
+
+    const portResult = await Aws.S3.upload({
+      Bucket: '2021-sunrinton-files',
+      Key: `apply_files/${moment().format(
+        `YYYY-MM-DD_HH_mm_ss_${data.teamName}_${portFile.name}`,
+      )}`,
+      Body: portFile.data,
+    });
+
+    await Apply.create({
+      studentId: data.studentId,
+      name: data.name,
+      teamName: data.teamName,
+      position: data.position,
+      portfolio: { Key: portResult.Key, Bucket: portResult.Bucket },
+      clothSize: data.clothSize,
+    });
+
+    return true;
   }
 
   async getApply(
     data: Nullish<{
-      from: number;
-      to: number;
+      start: number;
+      amount: number;
       teamName: string;
       name: string;
     }>,
