@@ -5,7 +5,10 @@ import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 
-function getObjectKeyByValue(object: any, value: string): string | undefined {
+function getObjectKeyByValue(
+  object: Record<string, any>,
+  value: string,
+): string | undefined {
   return Object.keys(object).find((key) => object[key] === value);
 }
 
