@@ -11,15 +11,8 @@ import {
 
 const applyRepository = new ApplyRepository();
 
-interface AdminApplyControllerInterface {
-  getApply(req: WrappedRequest): Promise<ApplyInterface[]>;
-  getApplyOne(req: WrappedRequest): Promise<ApplyInterface | null>;
-}
-
 @Controller
-export default class AdminApplyController
-  implements AdminApplyControllerInterface
-{
+export default class AdminApplyController {
   @GetMapping(':docid')
   async getApplyOne(req: WrappedRequest): Promise<ApplyInterface | null> {
     const { docid } = req.verify.params({ docid: DataTypes.string });
@@ -27,19 +20,35 @@ export default class AdminApplyController
   }
 
   @GetMapping()
-  async getApply(req: WrappedRequest): Promise<ApplyInterface[]> {
-    const { start, amount, teamname, name } = req.verify.query({
+  async getApply(req: WrappedRequest): Promise<ApplyInterface[] | null> {
+    const {
+      start,
+      amount,
+      teamname,
+      name,
+      orderby,
+      clothsize,
+      studentid,
+      position,
+    } = req.verify.query({
       start: DataTypes.numberNull,
       amount: DataTypes.numberNull,
       teamname: DataTypes.stringNull,
       name: DataTypes.stringNull,
       orderby: DataTypes.stringNull,
+      clothsize: DataTypes.stringNull,
+      studentid: DataTypes.stringNull,
+      position: DataTypes.stringNull,
     });
     return await applyRepository.getApply({
       start,
       amount,
       teamName: teamname,
       name,
+      orderBy: orderby,
+      clothSize: clothsize,
+      studentId: studentid,
+      position,
     });
   }
 
