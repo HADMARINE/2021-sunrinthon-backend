@@ -60,10 +60,10 @@ export default class ApplyRepository implements ApplyRepositoryInterface {
     }
 
     const portResult = await Aws.S3.upload({
-      Bucket: '2021-sunrinton-files',
-      Key: `apply_files/${moment().format(
-        `YYYY-MM-DD_HH_mm_ss_${data.teamName}_${portFile.name}`,
-      )}`,
+      Bucket: '2021sunrinhackathon-bigfiles',
+      Key: `apply_files/${process.env.NODE_ENV}/${moment().format(
+        `YYYY-MM-DD_HH_mm_ss`,
+      )}_${data.teamName}_${portFile.name}`,
       Body: portFile.data,
     });
 
@@ -90,8 +90,8 @@ export default class ApplyRepository implements ApplyRepositoryInterface {
     const apply = await Apply.find(
       QueryBuilder({ teamName: data.teamName, name: data.name }),
     )
-      .skip(data?.from || 0)
-      .limit(data?.to || 10)
+      .skip((data?.start || 1) - 1)
+      .limit(data?.amount || 10)
       .exec();
 
     return apply;
