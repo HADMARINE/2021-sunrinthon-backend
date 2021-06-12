@@ -85,7 +85,7 @@ export default class ApplyRepository {
       .sort(data.orderBy ? `-${data.orderBy}` : undefined)
       .exec();
 
-    return apply.length === 0 ? null | apply;
+    return apply.length === 0 ? null : apply;
   }
 
   async getApplyOne(data: { _id: string }): Promise<ApplyInterface | null> {
