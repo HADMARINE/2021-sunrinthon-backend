@@ -1,95 +1,91 @@
 import ErrorDictionary from '@error/ErrorDictionary';
 import Apply, { ApplyInterface } from '@models/Apply';
-import { QueryBuilder } from '@util/Assets';
+import Assets, { QueryBuilder } from '@util/Assets';
 import Aws from '@util/Aws';
 import { UploadedFile } from 'express-fileupload';
 import moment from 'moment';
 
-interface ApplyRepositoryInterface {
-  postApply(data: {
-    studentId: string;
-    name: string;
-    teamName: string;
-    position: string;
-    portfolio: UploadedFile;
-  }): Promise<boolean>;
-
-  getApply(
-    data: Nullish<{
-      from: number;
-      to: number;
-      teamName: string;
-      name: string;
-    }>,
-  ): Promise<ApplyInterface[]>;
-
-  getApplyOne(data: { _id: string }): Promise<ApplyInterface | null>;
-
-  updateApply(data: {
-    _id: string;
-    document: Partial<ApplyInterface>;
-  }): Promise<ApplyInterface | null>;
-
-  deleteApply(data: { _id: string }): Promise<boolean>;
-
-  deleteApplyMany(data: { _id: string[] }): Promise<number>;
-}
-
-export default class ApplyRepository implements ApplyRepositoryInterface {
+export default class ApplyRepository {
   async postApply(data: {
     studentId: string;
     name: string;
     teamName: string;
     position: string;
     portfolio: UploadedFile;
+    clothSize: string;
+    phoneNumber: string;
   }): Promise<boolean> {
-    try {
-      const portFile = data.portfolio;
-
-      if (!portFile.name.endsWith('pdf')) {
-        throw ErrorDictionary.data.parameterInvalid(
-          'portfolio (must end with .pdf)',
-        );
-      }
-
-      const portResult = await Aws.S3.upload({
-        Bucket: '2021-sunrinton-files',
-        Key: `apply_files/${moment().format(
-          `YYYY-MM-DD_HH_mm_ss_${data.teamName}_${portFile.name}`,
-        )}`,
-        Body: portFile.data,
-      });
-
-      await Apply.create({
-        studentId: data.studentId,
-        name: data.name,
-        teamName: data.teamName,
-        position: data.position,
-        portfolio: { Key: portResult.Key, Bucket: portResult.Bucket },
-      });
-
-      return true;
-    } catch {
-      return false;
+    if (!Assets.data.verify.phone(data.phoneNumber)) {
+      throw ErrorDictionary.data.parameterInvalid(`phonenumber`);
     }
+
+    const portFile = data.portfolio;
+
+    if (!portFile.name.endsWith('pdf')) {
+      throw ErrorDictionary.data.parameterInvalid(
+        'portfolio (must end with .pdf)',
+      );
+    }
+
+    const portResult = await Aws.S3.upload({
+      Bucket: '2021sunrinhackathon-bigfiles',
+      Key: `apply_files/${process.env.NODE_ENV}/${moment().format(
+        `YYYY-MM-DD_HH_mm_ss`,
+      )}_${data.teamName}_${portFile.name}`,
+      Body: portFile.data,
+    });
+
+    await Apply.create({
+      studentId: data.studentId,
+      name: data.name,
+      teamName: data.teamName,
+      position: data.position,
+      portfolio: { Key: portResult.Key, Bucket: portResult.Bucket },
+      clothSize: data.clothSize,
+    });
+
+    return true;
   }
 
   async getApply(
     data: Nullish<{
-      from: number;
-      to: number;
+      start: number;
+      amount: number;
       teamName: string;
       name: string;
+      clothSize: string;
+      studentId: string;
+      position: string;
+      orderBy: string;
     }>,
-  ): Promise<ApplyInterface[]> {
+  ): Promise<ApplyInterface[] | null> {
+    enum OrderBy {
+      teamname,
+      name,
+      clothsize,
+      studentid,
+      position,
+    }
+
+    if (data.orderBy && !Object.keys(OrderBy).indexOf(data.orderBy)) {
+      throw ErrorDictionary.data.parameterInvalid('orderby');
+    }
+
     const apply = await Apply.find(
-      QueryBuilder({ teamName: data.teamName, name: data.name }),
+      QueryBuilder({
+        teamName: data.teamName,
+        name: data.name,
+        clothSize: data.clothSize,
+        studentId: data.studentId,
+        position: data.position,
+      }),
     )
-      .skip(data?.from || 0)
-      .limit(data?.to || 10)
+      .skip((data?.start || 1) - 1)
+      .limit(data?.amount || 10)
+      .sort(data.orderBy ? `-${data.orderBy}` : undefined)
       .exec();
 
-    return apply;
+    return apply.length === 0 ? null : apply;
   }
 
   async getApplyOne(data: { _id: string }): Promise<ApplyInterface | null> {

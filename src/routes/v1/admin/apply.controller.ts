@@ -2,27 +2,17 @@ import { ApplyInterface } from '@models/Apply';
 import ApplyRepository from '@repo/ApplyRepository';
 import packageSettings from '@src/../package.json';
 import {
-  AllMapping,
   Controller,
   DataTypes,
   DeleteMapping,
   GetMapping,
-  PatchMapping,
-  PostMapping,
   WrappedRequest,
 } from 'express-quick-builder';
 
 const applyRepository = new ApplyRepository();
 
-interface AdminApplyControllerInterface {
-  getApply(req: WrappedRequest): Promise<ApplyInterface[]>;
-  getApplyOne(req: WrappedRequest): Promise<ApplyInterface | null>;
-}
-
 @Controller
-export default class AdminApplyController
-  implements AdminApplyControllerInterface
-{
+export default class AdminApplyController {
   @GetMapping(':docid')
   async getApplyOne(req: WrappedRequest): Promise<ApplyInterface | null> {
     const { docid } = req.verify.params({ docid: DataTypes.string });
@@ -30,18 +20,35 @@ export default class AdminApplyController
   }
 
   @GetMapping()
-  async getApply(req: WrappedRequest): Promise<ApplyInterface[]> {
-    const { from, to, teamname, name } = req.verify.query({
-      from: DataTypes.numberNull,
-      to: DataTypes.numberNull,
+  async getApply(req: WrappedRequest): Promise<ApplyInterface[] | null> {
+    const {
+      start,
+      amount,
+      teamname,
+      name,
+      orderby,
+      clothsize,
+      studentid,
+      position,
+    } = req.verify.query({
+      start: DataTypes.numberNull,
+      amount: DataTypes.numberNull,
       teamname: DataTypes.stringNull,
       name: DataTypes.stringNull,
+      orderby: DataTypes.stringNull,
+      clothsize: DataTypes.stringNull,
+      studentid: DataTypes.stringNull,
+      position: DataTypes.stringNull,
     });
     return await applyRepository.getApply({
-      from,
-      to,
+      start,
+      amount,
       teamName: teamname,
       name,
+      orderBy: orderby,
+      clothSize: clothsize,
+      studentId: studentid,
+      position,
     });
   }
 

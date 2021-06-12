@@ -5,7 +5,10 @@ import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 
-function getObjectKeyByValue(object: any, value: string): string | undefined {
+function getObjectKeyByValue(
+  object: Record<string, any>,
+  value: string,
+): string | undefined {
   return Object.keys(object).find((key) => object[key] === value);
 }
 
@@ -69,21 +72,22 @@ function returnRecord(data: any): Record<any, any> | null {
   return data;
 }
 
-function verifyEmail(email: string): void {
+function verifyEmail(email: string): boolean {
   const emailRegex = new RegExp(
     /^(?:[a-zA-Z0-9])([-_0-9a-zA-Z]+(\.[-_0-9a-zA-Z]+)*|^\"([\001-\010\013\014\016-\037!#-\[\]-\177]|\\[\001-011\013\014\016-\177])*\")@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}\.?$/,
   ); // if true. valid
   if (!emailRegex.test(email)) {
-    throw error.data.parameterInvalid('email');
+    return false;
   }
-  return;
+  return true;
 }
 
-function verifyPhone(phone: string): void {
+function verifyPhone(phone: string): boolean {
   const phoneRegex = new RegExp(/((?![0-9-]).)/g); // if true, invalid.
   if (phoneRegex.test(phone)) {
-    throw error.data.parameterInvalid('phone');
+    return false;
   }
+  return true;
 }
 
 function filterType<T>(param: any, type: string): T | undefined {
