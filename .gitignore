@@ -12,6 +12,4 @@ package-lock.json
 
 dist
 
-.pnp.js
-
-.yarn
+rds-combined-ca-bundle.pem
