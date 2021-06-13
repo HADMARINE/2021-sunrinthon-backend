@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+import fs from 'fs';
+
 interface Auth {
   user: string;
   pass: string;
@@ -36,11 +38,23 @@ export default (): Promise<typeof mongoose | undefined> => {
     });
   }
 
-  return mongoose.connect(mongoURL, {
-    ...auth,
-    dbName,
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-  });
+  const result = process.env.DB_SSL_KEY
+    ? mongoose.connect(mongoURL, {
+        ...auth,
+        dbName,
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useFindAndModify: true,
+        ssl: true,
+        sslCA: [fs.readFileSync(`${process.cwd()}/${process.env.DB_SSL_KEY}`)],
+      })
+    : mongoose.connect(mongoURL, {
+        ...auth,
+        dbName,
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useFindAndModify: false,
+      });
+
+  return result;
 };
