@@ -1,5 +1,8 @@
 import mongoose from 'mongoose';
 import fs from 'fs';
+import tunnel from 'tunnel-ssh';
+import _logger from 'clear-logger';
+const logger = _logger.customName('MDB');
 
 interface Auth {
   user: string;
@@ -9,6 +12,11 @@ interface Auth {
 const MONGO_URL = process.env.DB_HOST;
 const env = process.env.NODE_ENV || 'development';
 
+export let dbConnectionStatus:
+  | 'NOT_CONNECTED'
+  | 'CONN_SSL'
+  | 'CONN_SSL_TUNNEL'
+  | 'CONN_PLAIN' = 'NOT_CONNECTED';
 if (!process.env.DB_USER || !process.env.DB_PASS) {
   throw new Error('DB AUTH INFO NOT PROVIDED');
 }
@@ -26,35 +34,88 @@ if (env === 'development') {
   mongoose.set('debug', true);
 }
 
-export default (): Promise<typeof mongoose | undefined> => {
-  if (
-    !process.env.DB_HOST ||
-    !process.env.DB_NAME ||
-    !process.env.DB_USER ||
-    !process.env.DB_PASS
-  ) {
-    return new Promise((res) => {
-      res(undefined);
-    });
-  }
+export default async (): Promise<void> => {
+  try {
+    if (
+      !process.env.DB_HOST ||
+      !process.env.DB_NAME ||
+      !process.env.DB_USER ||
+      !process.env.DB_PASS
+    ) {
+      throw new Error('ENV NOT SET');
+    }
 
-  const result = process.env.DB_SSL_KEY
-    ? mongoose.connect(mongoURL, {
-        ...auth,
-        dbName,
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useFindAndModify: true,
-        ssl: true,
-        sslCA: [fs.readFileSync(`${process.cwd()}/${process.env.DB_SSL_KEY}`)],
-      })
-    : mongoose.connect(mongoURL, {
+    if (process.env.DB_SSL_KEY) {
+      try {
+        if (process.env.NODE_ENV !== 'production') {
+          throw 0;
+        }
+        await mongoose.connect(mongoURL, {
+          ...auth,
+          dbName,
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+          useFindAndModify: true,
+          ssl: true,
+          sslCA: [
+            fs.readFileSync(`${process.cwd()}/${process.env.DB_SSL_KEY}`),
+          ],
+        });
+        dbConnectionStatus = 'CONN_SSL';
+      } catch {
+        if (
+          !process.env.SSH_USERNAME ||
+          !process.env.SSH_HOST ||
+          !process.env.SSH_PORT ||
+          !process.env.DEV_PORT ||
+          !process.env.SSH_PRIV_KEY_LOC
+        ) {
+          throw new Error('ENV NOT SET');
+        }
+
+        tunnel(
+          {
+            username: process.env.SSH_USERNAME,
+            host: process.env.SSH_HOST,
+            port: parseInt(process.env.SSH_PORT, 10),
+            privateKey: fs.readFileSync(
+              `${process.cwd()}/${process.env.SSH_PRIV_KEY_LOC}`,
+            ),
+            dstHost: new URL(process.env.DB_HOST).hostname,
+            dstPort: 27017,
+            localHost: '127.0.0.1',
+            localPort: 64001,
+          },
+          async (error, server) => {
+            if (error) throw error;
+            await mongoose.connect(`mongodb://localhost:64001`, {
+              ...auth,
+              tlsAllowInvalidHostnames: true,
+              dbName,
+              useNewUrlParser: true,
+              useUnifiedTopology: true,
+              useFindAndModify: true,
+              ssl: true,
+              sslCA: [
+                fs.readFileSync(`${process.cwd()}/${process.env.DB_SSL_KEY}`),
+              ],
+            });
+            dbConnectionStatus = 'CONN_SSL_TUNNEL';
+          },
+        );
+      }
+    } else {
+      await mongoose.connect(mongoURL, {
         ...auth,
         dbName,
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useFindAndModify: false,
       });
-
-  return result;
+      dbConnectionStatus = 'CONN_PLAIN';
+    }
+  } catch (e) {
+    logger.debug(e);
+    logger.debug('Failed to initialize MongoDB server connection', false);
+  }
 };
