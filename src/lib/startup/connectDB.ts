@@ -77,18 +77,12 @@ export default async function connectDB(): Promise<void> {
           throw new Error('ENV NOT SET');
         }
 
-        const port =
-          process.env.NODE_ENV === 'test'
-            ? 62100
-            : await portfinder.getPortPromise({
-                port: 62000,
-                stopPort: 65535,
-              });
+        const port = await portfinder.getPortPromise({
+          port: 62000,
+          stopPort: 65535,
+        });
 
-        logger.debug(
-          `Using port ${port} internally. (For SSH Tunneling)`,
-          false,
-        );
+        logger.info(`Using port ${port} internally. (For SSH Tunneling)`);
         tunnel(
           {
             username: process.env.SSH_USERNAME,
@@ -161,4 +155,28 @@ export const wrapConnectDbWithSync = (): void => {
     if (STATUS === status.ERROR) throw new Error('Mongodb connection failed');
   }
   logger.debug('Mongodb Database Connected', false);
+};
+
+export const connectDBTest = (): Promise<typeof mongoose | undefined> => {
+  if (
+    !process.env.TEST_DB_HOST ||
+    !process.env.TEST_DB_NAME ||
+    !process.env.TEST_DB_USER ||
+    !process.env.TEST_DB_PASS
+  ) {
+    return new Promise((res) => {
+      res(undefined);
+    });
+  }
+
+  return mongoose.connect(process.env.TEST_DB_HOST, {
+    auth: {
+      user: process.env.TEST_DB_USER,
+      password: process.env.TEST_DB_PASS,
+    },
+    dbName: process.env.TEST_DB_NAME,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+  });
 };

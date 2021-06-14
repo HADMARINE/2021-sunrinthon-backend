@@ -1,12 +1,12 @@
-import { Root } from '../index';
+import { testRoot } from '../App';
 import http from 'http';
 import ServerBuilder from 'express-quick-builder';
 import mongoose from 'mongoose';
 
 let rootInstance: ReturnType<typeof ServerBuilder['serverStarter']> | undefined;
 
-function createServer(): http.Server {
-  rootInstance = Root(63000);
+async function createServer(): Promise<http.Server> {
+  rootInstance = await testRoot(63000);
   return rootInstance.server;
 }
 
