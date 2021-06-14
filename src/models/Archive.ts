@@ -23,19 +23,19 @@ export interface ArchiveDocument extends Document, ArchiveInterface {
 
 // ArchiveSchema.methods.~~
 
-ArchiveSchema.pre('save', function (next: HookNextFunction): void {
-  const doc = this as ArchiveDocument;
-  models.Archive.findOne(
-    {
-      $or: [],
-    },
-    function (err: Error, site: ArchiveDocument) {
-      if (site) next(error.db.exists());
-      if (err) next(err);
-      next();
-    },
-  );
-});
+// ArchiveSchema.pre('save', function (next: HookNextFunction): void {
+//   const doc = this as ArchiveDocument;
+//   models.Archive.findOne(
+//     {
+//       $or: [],
+//     },
+//     function (err: Error, site: ArchiveDocument) {
+//       if (site) next(error.db.exists());
+//       if (err) next(err);
+//       next();
+//     },
+//   );
+// });
 
 const Archive = model<ArchiveDocument>('Archive', ArchiveSchema);
 

@@ -15,19 +15,19 @@ export interface TimeDocument extends Document, TimeInterface {}
 
 // TimeSchema.methods.~~
 
-TimeSchema.pre('save', function (next: HookNextFunction): void {
-  const doc = this as TimeDocument;
-  //   models.Time.findOne(
-  //     {
-  //       $or: [],
-  //     },
-  //     function (err: Error, site: TimeDocument) {
-  //       if (site) next(error.db.exists());
-  //       if (err) next(err);
-  //       next();
-  //     },
-  //   );
-});
+// TimeSchema.pre('save', function (next: HookNextFunction): void {
+//   const doc = this as TimeDocument;
+//   models.Time.findOne(
+//     {
+//       $or: [],
+//     },
+//     function (err: Error, site: TimeDocument) {
+//       if (site) next(error.db.exists());
+//       if (err) next(err);
+//       next();
+//     },
+//   );
+// });
 
 const Time = model<TimeDocument>('Time', TimeSchema);
 
