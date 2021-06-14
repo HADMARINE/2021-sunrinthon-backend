@@ -11,23 +11,9 @@ import {
   WrappedRequest,
   DataTypes,
 } from 'express-quick-builder';
-
-interface IndexControllerInterface {
-  index(): string;
-
-  status(): string;
-
-  info(): Record<string, any>;
-
-  versionInfo(): string;
-
-  timeInfo(): string;
-
-  test(req: WrappedRequest): void;
-}
-
+import { dbConnectionStatus } from '@lib/startup/connectDB';
 @Controller
-export default class IndexController implements IndexControllerInterface {
+export default class IndexController {
   @AllMapping()
   @ReturnRawData()
   index(): string {
@@ -74,5 +60,11 @@ export default class IndexController implements IndexControllerInterface {
   @GetMapping('/info/version')
   versionInfo(): string {
     return packageJson.version;
+  }
+
+  @GetMapping('/info/database')
+  @ReturnRawData()
+  getDatabaseStatus(): string {
+    return dbConnectionStatus;
   }
 }
