@@ -12,7 +12,6 @@ interface Auth {
   pass: string;
 }
 
-const MONGO_URL = process.env.DB_HOST;
 const env = process.env.NODE_ENV || 'development';
 
 export let dbConnectionStatus:
@@ -30,7 +29,7 @@ const auth: Auth = {
   pass: process.env.DB_PASS,
 };
 
-const mongoURL: any = MONGO_URL;
+const mongoURL: any = process.env.DB_HOST;
 let dbName: any = process.env.DB_NAME;
 
 if (env !== 'production') dbName += `_${env}`;
@@ -82,7 +81,7 @@ export default async function connectDB(): Promise<void> {
           process.env.NODE_ENV === 'test'
             ? 62100
             : await portfinder.getPortPromise({
-                port: 60000,
+                port: 62000,
                 stopPort: 65535,
               });
 
