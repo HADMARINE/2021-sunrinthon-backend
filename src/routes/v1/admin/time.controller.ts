@@ -16,7 +16,7 @@ export default class TimeController implements TimeControllerInterface {
   @PostMapping('/start/hackathon')
   async hackathonTime(req: WrappedRequest): Promise<void> {
     const { value } = req.verify.body({ value: DataTypes.date });
-    const time = await Time.findOneAndUpdate(
+    await Time.findOneAndUpdate(
       { type: 'hackathon' },
       { $set: { value } },
       { upsert: true },
@@ -26,7 +26,7 @@ export default class TimeController implements TimeControllerInterface {
   @PostMapping('/start/market')
   async marketTime(req: WrappedRequest): Promise<void> {
     const { value } = req.verify.body({ value: DataTypes.date });
-    const time = await Time.findOneAndUpdate(
+    await Time.findOneAndUpdate(
       { type: 'market' },
       { $set: { value } },
       { upsert: true },

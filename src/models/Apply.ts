@@ -1,5 +1,4 @@
-import { model, Schema, Document, HookNextFunction, models } from 'mongoose';
-import error from '@error/ErrorDictionary';
+import { model, Schema, Document, HookNextFunction } from 'mongoose';
 import Aws from '@util/Aws';
 import ErrorDictionary from '@error/ErrorDictionary';
 

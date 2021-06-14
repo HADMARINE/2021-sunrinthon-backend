@@ -1,6 +1,5 @@
 import { ApplyInterface } from '@models/Apply';
 import ApplyRepository from '@repo/ApplyRepository';
-import packageSettings from '@src/../package.json';
 import {
   Controller,
   DataTypes,
@@ -24,30 +23,30 @@ export default class AdminApplyController {
     const {
       start,
       amount,
-      teamname,
+      teamName,
       name,
-      orderby,
-      clothsize,
-      studentid,
+      orderBy,
+      clothSize,
+      studentId,
       position,
     } = req.verify.query({
       start: DataTypes.numberNull,
       amount: DataTypes.numberNull,
-      teamname: DataTypes.stringNull,
+      teamName: DataTypes.stringNull,
       name: DataTypes.stringNull,
-      orderby: DataTypes.stringNull,
-      clothsize: DataTypes.stringNull,
-      studentid: DataTypes.stringNull,
+      orderBy: DataTypes.stringNull,
+      clothSize: DataTypes.stringNull,
+      studentId: DataTypes.stringNull,
       position: DataTypes.stringNull,
     });
     return await applyRepository.getApply({
       start,
       amount,
-      teamName: teamname,
+      teamName,
       name,
-      orderBy: orderby,
-      clothSize: clothsize,
-      studentId: studentid,
+      orderBy,
+      clothSize,
+      studentId,
       position,
     });
   }
