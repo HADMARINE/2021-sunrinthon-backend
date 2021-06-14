@@ -1,6 +1,6 @@
 import checkInitializeProjectSettings from '@lib/startup/checkInitialProjectSettings';
 import io from '@src/io';
-import { connectDBTest, wrapConnectDbWithSync } from '@lib/startup/connectDB';
+import connectDB, { wrapConnectDbWithSync } from '@lib/startup/connectDB';
 import { ServerStarter } from 'express-quick-builder';
 import cron from '@lib/middlewares/cron';
 import morgan from '@lib/middlewares/morgan';
@@ -75,7 +75,7 @@ export async function testRoot(
   port = PORT,
 ): Promise<ReturnType<typeof ServerStarter>> {
   try {
-    await connectDBTest();
+    await connectDB();
     const server = ServerStarter({ ...SERVER_STARTER_PROPERTIES, port });
     io(server.server);
     return server;
