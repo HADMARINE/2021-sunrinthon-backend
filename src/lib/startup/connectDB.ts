@@ -118,8 +118,6 @@ export default async function connectDB(): Promise<void> {
                 fs.readFileSync(`${process.cwd()}/${process.env.DB_SSL_KEY}`),
               ],
             });
-            console.log('HERE!');
-
             dbConnectionStatus = 'CONN_SSL_TUNNEL';
           },
         );
