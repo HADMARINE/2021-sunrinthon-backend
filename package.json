@@ -12,8 +12,8 @@
     "lint": "eslint -c .eslintrc.js --ext .ts ./src",
     "test": "NODE_ENV=test npx jest --config ./jest.config.js --watch --forceExit --testTimeout=10000",
     "test-auto": "NODE_ENV=test npx jest --config ./jest.config.js --forceExit --detectOpenHandles",
-    "enc:env": "openssl aes-256-cbc -e -in .env -out .env.pub -md md5 -k $PROGRAM_ENV_SECRET_KEY",
-    "dec:env": "openssl aes-256-cbc -d -in .env.pub -out .env -md md5 -k $PROGRAM_ENV_SECRET_KEY",
+    "enc:env": "openssl aes-256-cbc -e -in .env -out .env.pub -md md5 -k $PROGRAM_ENV_SECRET_KEY; openssl aes-256-cbc -e -in .sshkey.pem -out .sshkey.pub -md md5 -k $PROGRAM_ENV_SECRET_KEY;",
+    "dec:env": "openssl aes-256-cbc -d -in .env.pub -out .env -md md5 -k $PROGRAM_ENV_SECRET_KEY; openssl aes-256-cbc -d -in .sshkey.pub -out .sshkey.pem -md md5 -k $PROGRAM_ENV_SECRET_KEY",
     "enc:env-m": "openssl aes-256-cbc -e -in .env -out .env.pub -md md5 -k",
     "dec:env-m": "openssl aes-256-cbc -d -in .env.pub -out .env -md md5 -k",
     "berry": "yarn set version berry",
@@ -45,7 +45,8 @@
     "pm2": "^5.1.0",
     "require-strip-json-comments": "^2.0.0",
     "socket.io": "^4.1.2",
-    "strip-json-comments": "^3.1.1"
+    "strip-json-comments": "^3.1.1",
+    "tunnel-ssh": "^4.1.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.3",
@@ -65,6 +66,8 @@
     "@types/jest": "^26.0.22",
     "@types/jest-expect-message": "^1.0.3",
     "@types/jsonwebtoken": "^8.5.1",
+    "@types/tunnel-ssh": "^4.1.0",
+
     "@types/mongoose": "^5.10.4",
     "@types/morgan": "^1.9.2",
     "@types/node": "^15.12.2",
