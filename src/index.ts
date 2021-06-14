@@ -1,6 +1,6 @@
 import checkInitializeProjectSettings from '@lib/startup/checkInitialProjectSettings';
 import io from '@src/io';
-import connectDB from '@lib/startup/connectDB';
+import { wrapConnectDbWithSync } from '@lib/startup/connectDB';
 import { ServerStarter } from 'express-quick-builder';
 import cron from '@lib/middlewares/cron';
 import morgan from '@lib/middlewares/morgan';
@@ -42,9 +42,12 @@ const REQUEST_HANDLERS = [
   express.urlencoded({ extended: true, limit: '100mb' }),
 ];
 
-const STARTUP_EXECUTES = [checkInitializeProjectSettings, cron, connectDB];
+const STARTUP_EXECUTES = [cron];
 
 export function Root(port = PORT): ReturnType<typeof ServerStarter> {
+  checkInitializeProjectSettings();
+  wrapConnectDbWithSync();
+
   const server = ServerStarter({
     port,
     routePath:
@@ -61,6 +64,7 @@ export function Root(port = PORT): ReturnType<typeof ServerStarter> {
         : false,
     appName: packageJson.name,
   });
+
   io(server.server);
   return server;
 }

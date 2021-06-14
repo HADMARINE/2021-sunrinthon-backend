@@ -2,6 +2,9 @@ import mongoose from 'mongoose';
 import fs from 'fs';
 import tunnel from 'tunnel-ssh';
 import _logger from 'clear-logger';
+import portfinder from 'portfinder';
+import deasync from 'deasync';
+
 const logger = _logger.customName('MDB');
 
 interface Auth {
@@ -17,6 +20,7 @@ export let dbConnectionStatus:
   | 'CONN_SSL'
   | 'CONN_SSL_TUNNEL'
   | 'CONN_PLAIN' = 'NOT_CONNECTED';
+
 if (!process.env.DB_USER || !process.env.DB_PASS) {
   throw new Error('DB AUTH INFO NOT PROVIDED');
 }
@@ -34,7 +38,7 @@ if (env === 'development') {
   mongoose.set('debug', true);
 }
 
-export default async (): Promise<void> => {
+export default async function connectDB(): Promise<void> {
   try {
     if (
       !process.env.DB_HOST ||
@@ -48,8 +52,9 @@ export default async (): Promise<void> => {
     if (process.env.DB_SSL_KEY) {
       try {
         if (process.env.NODE_ENV !== 'production') {
-          throw 0;
+          throw new Error('');
         }
+
         await mongoose.connect(mongoURL, {
           ...auth,
           dbName,
@@ -73,6 +78,18 @@ export default async (): Promise<void> => {
           throw new Error('ENV NOT SET');
         }
 
+        const port =
+          process.env.NODE_ENV === 'test'
+            ? 62100
+            : await portfinder.getPortPromise({
+                port: 60000,
+                stopPort: 65535,
+              });
+
+        logger.debug(
+          `Using port ${port} internally. (For SSH Tunneling)`,
+          false,
+        );
         tunnel(
           {
             username: process.env.SSH_USERNAME,
@@ -84,11 +101,12 @@ export default async (): Promise<void> => {
             dstHost: new URL(process.env.DB_HOST).hostname,
             dstPort: 27017,
             localHost: '127.0.0.1',
-            localPort: 64001,
+            localPort: port,
+            keepAlive: false,
           },
           async (error, server) => {
             if (error) throw error;
-            await mongoose.connect(`mongodb://localhost:64001`, {
+            await mongoose.connect(`mongodb://localhost:${port}`, {
               ...auth,
               tlsAllowInvalidHostnames: true,
               dbName,
@@ -100,6 +118,8 @@ export default async (): Promise<void> => {
                 fs.readFileSync(`${process.cwd()}/${process.env.DB_SSL_KEY}`),
               ],
             });
+            console.log('HERE!');
+
             dbConnectionStatus = 'CONN_SSL_TUNNEL';
           },
         );
@@ -118,4 +138,30 @@ export default async (): Promise<void> => {
     logger.debug(e);
     logger.debug('Failed to initialize MongoDB server connection', false);
   }
+}
+
+export const wrapConnectDbWithSync = (): void => {
+  enum status {
+    'INITIAL',
+    'RESOLVED',
+    'ERROR',
+  }
+
+  let STATUS = status.INITIAL;
+
+  connectDB()
+    .then(() => {
+      STATUS = status.RESOLVED;
+    })
+    .catch((e) => {
+      STATUS = status.ERROR;
+      throw e;
+    });
+  // @ts-ignore
+  while (STATUS !== status.RESOLVED) {
+    deasync.sleep(200);
+    // @ts-ignore
+    if (STATUS === status.ERROR) throw new Error('Mongodb connection failed');
+  }
+  logger.debug('Mongodb Database Connected', false);
 };
