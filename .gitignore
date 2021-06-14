@@ -13,3 +13,4 @@ package-lock.json
 dist
 
 rds-combined-ca-bundle.pem
+.sshkey.pem
