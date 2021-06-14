@@ -16,7 +16,7 @@ export default class ApplyRepository {
     phoneNumber: string;
   }): Promise<boolean> {
     if (!Assets.data.verify.phone(data.phoneNumber)) {
-      throw ErrorDictionary.data.parameterInvalid(`phonenumber`);
+      throw ErrorDictionary.data.parameterInvalid(`phoneNumber`);
     }
 
     const portFile = data.portfolio;
