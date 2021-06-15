@@ -21,7 +21,7 @@
     "classic": "yarn set version classic"
   },
   "dependencies": {
-    "aws-sdk": "^2.925.0",
+    "aws-sdk": "^2.928.0",
     "chalk": "^4.1.0",
     "clear-logger": "^1.0.3",
     "compression": "^1.7.4",
@@ -50,9 +50,9 @@
     "tunnel-ssh": "^4.1.4"
   },
   "devDependencies": {
-    "@babel/cli": "^7.14.3",
+    "@babel/cli": "^7.14.5",
     "@babel/core": "^7.13.10",
-    "@babel/plugin-proposal-class-properties": "^7.13.0",
+    "@babel/plugin-proposal-class-properties": "^7.14.5",
     "@babel/plugin-proposal-decorators": "^7.13.5",
     "@babel/plugin-transform-runtime": "^7.13.10",
     "@babel/preset-env": "^7.13.12",
@@ -75,7 +75,7 @@
     "@types/supertest": "^2.0.10",
     "@types/tunnel-ssh": "^4.1.0",
     "@typescript-eslint/eslint-plugin": "^4.26.1",
-    "@typescript-eslint/parser": "^4.26.1",
+    "@typescript-eslint/parser": "^4.27.0",
     "babel-plugin-module-resolver": "^4.1.0",
     "eslint-plugin-babel": "^5.3.1",
     "eslint-plugin-jest": "^24.1.5",
