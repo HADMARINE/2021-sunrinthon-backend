@@ -33,8 +33,9 @@ export default class ApplyRepository {
         Bucket: '2021sunrinhackathon-bigfiles',
         Key: `apply_files/${process.env.NODE_ENV}/${moment().format(
           `YYYY-MM-DD_HH_mm_ss`,
-        )}_${data.teamName}_${portFile.name}`,
+        )}_${data.teamName}_${portFile.name}`.replace(/[\n\r]+/g, ''),
         Body: portFile.data,
+        ContentType: portFile.mimetype,
       });
     } catch {
       throw ErrorDictionary.db.error();
