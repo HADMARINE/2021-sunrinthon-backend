@@ -38,7 +38,7 @@ const REQUEST_HANDLERS = [
   // Assets.wrapper(ipfilter),
   fileUploader({
     limits: { fileSize: 50 * 1024 * 1024 },
-    useTempFiles: true,
+    useTempFiles: false,
     tempFileDir: '/tmp/file/',
     debug: process.env.NODE_ENV === 'development',
   }),
