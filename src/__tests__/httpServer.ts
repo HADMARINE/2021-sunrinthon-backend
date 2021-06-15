@@ -6,8 +6,8 @@ import http from 'http';
 let agent: SuperAgentTest;
 let server: http.Server;
 
-beforeAll(() => {
-  server = Test.server.create();
+beforeAll(async () => {
+  server = await Test.server.create();
   agent = supertest.agent(server);
 });
 

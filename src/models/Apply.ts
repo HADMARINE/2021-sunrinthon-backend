@@ -1,5 +1,4 @@
-import { model, Schema, Document, HookNextFunction, models } from 'mongoose';
-import error from '@error/ErrorDictionary';
+import { model, Schema, Document, HookNextFunction } from 'mongoose';
 import Aws from '@util/Aws';
 import ErrorDictionary from '@error/ErrorDictionary';
 
@@ -41,19 +40,19 @@ export interface ApplyDocument extends Document, ApplyInterface {
 
 // ApplySchema.methods.~~
 
-ApplySchema.pre('save', function (next: HookNextFunction): void {
-  const doc = this as ApplyDocument;
-  // models.Apply.findOne(
-  //   {
-  //     $or: [],
-  //   },
-  //   function (err: Error, site: ApplyDocument) {
-  //     if (site) next(error.db.exists());
-  //     if (err) next(err);
-  //     next();
-  //   },
-  // );
-});
+// ApplySchema.pre('save', function (next: HookNextFunction): void {
+//   const doc = this as ApplyDocument;
+// models.Apply.findOne(
+//   {
+//     $or: [],
+//   },
+//   function (err: Error, site: ApplyDocument) {
+//     if (site) next(error.db.exists());
+//     if (err) next(err);
+//     next();
+//   },
+// );
+// });
 
 const Apply = model<ApplyDocument>('Apply', ApplySchema);
 

@@ -16,7 +16,7 @@ export default class ApplyRepository {
     phoneNumber: string;
   }): Promise<boolean> {
     if (!Assets.data.verify.phone(data.phoneNumber)) {
-      throw ErrorDictionary.data.parameterInvalid(`phonenumber`);
+      throw ErrorDictionary.data.parameterInvalid(`phoneNumber`);
     }
 
     const portFile = data.portfolio;
@@ -27,13 +27,18 @@ export default class ApplyRepository {
       );
     }
 
-    const portResult = await Aws.S3.upload({
-      Bucket: '2021sunrinhackathon-bigfiles',
-      Key: `apply_files/${process.env.NODE_ENV}/${moment().format(
-        `YYYY-MM-DD_HH_mm_ss`,
-      )}_${data.teamName}_${portFile.name}`,
-      Body: portFile.data,
-    });
+    let portResult;
+    try {
+      portResult = await Aws.S3.upload({
+        Bucket: '2021sunrinhackathon-bigfiles',
+        Key: `apply_files/${process.env.NODE_ENV}/${moment().format(
+          `YYYY-MM-DD_HH_mm_ss`,
+        )}_${data.teamName}_${portFile.name}`,
+        Body: portFile.data,
+      });
+    } catch {
+      throw ErrorDictionary.db.error();
+    }
 
     await Apply.create({
       studentId: data.studentId,
