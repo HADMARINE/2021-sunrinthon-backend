@@ -18,6 +18,7 @@ export let dbConnectionStatus:
   | 'NOT_CONNECTED'
   | 'CONN_SSL'
   | 'CONN_SSL_TUNNEL'
+  | 'CONN_PLAIN_DEV'
   | 'CONN_PLAIN' = 'NOT_CONNECTED';
 
 if (!process.env.DB_USER || !process.env.DB_PASS) {
@@ -46,6 +47,12 @@ export default async function connectDB(): Promise<void> {
       !process.env.DB_PASS
     ) {
       throw new Error('ENV NOT SET');
+    }
+
+    if (process.env.DB_ENV === 'development') {
+      await connectDBTest();
+      dbConnectionStatus = 'CONN_PLAIN_DEV';
+      return;
     }
 
     if (process.env.DB_SSL_KEY) {
