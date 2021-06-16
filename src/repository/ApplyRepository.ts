@@ -28,16 +28,19 @@ export default class ApplyRepository {
     }
 
     let portResult;
-    console.log('UPLOADSTART');
+    const fileName = `${
+      process.env.DB_ENV === 'development' ? 'development' : 'production'
+    }/${moment().format(`YYYY-MM-DD_HH_mm_ss`)}_${data.teamName.replace(
+      /([/])/,
+      '',
+    )}.pdf`;
     try {
-      portResult = await Aws.S3.upload({
-        Bucket: '2021sunrinhackathon-bigfiles',
-        Key: `apply_files/${process.env.NODE_ENV}/${moment().format(
-          `YYYY-MM-DD_HH_mm_ss`,
-        )}_${data.teamName.replace(/([/])/, '')}.pdf`,
+      portResult = await Aws.S3.uploadAccelerate({
+        Bucket: 'sunrinhackathon-bigfiles',
+        Key: `apply_files/${fileName}`,
         Body: portFile.data,
+        ContentType: portFile.mimetype,
       });
-      console.log('UPLOADFINISH');
     } catch {
       throw ErrorDictionary.db.error();
     }

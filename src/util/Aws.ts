@@ -84,6 +84,30 @@ async function S3UPLOAD(
     });
 }
 
+async function S3UPLOAD_ACCELERATE(
+  param: AWS.S3.PutObjectRequest,
+): Promise<ManagedUpload.SendData> {
+  const s3 = new AWS.S3({
+    accessKeyId: process.env.S3_PUB_KEY,
+    secretAccessKey: process.env.S3_PRIV_KEY,
+    region: process.env.S3_REGION,
+    useAccelerateEndpoint: true,
+  });
+
+  return await new Promise(function (resolve, reject) {
+    s3.upload(param, (err, data) => {
+      if (err) reject(err);
+      resolve(data);
+    });
+  })
+    .then((data) => {
+      return data as ManagedUpload.SendData;
+    })
+    .catch(() => {
+      throw error.aws.S3();
+    });
+}
+
 function S3_GET_SIGNED_URL(param: {
   Bucket: string;
   Key: string;
@@ -165,6 +189,7 @@ export default {
   SES,
   S3: {
     upload: S3UPLOAD,
+    uploadAccelerate: S3UPLOAD_ACCELERATE,
     getSignedUrl: S3_GET_SIGNED_URL,
     getSignedUrlSync: S3_GET_SIGNED_URL_SYNC,
   },
