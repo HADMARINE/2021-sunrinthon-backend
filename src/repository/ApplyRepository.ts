@@ -29,7 +29,10 @@ export default class ApplyRepository {
 
     let portResult;
     const fileName = `${
-      process.env.DB_ENV === 'development' ? 'development' : 'production'
+      process.env.DB_ENV === 'development' ||
+      process.env.NODE_ENV !== 'production'
+        ? 'development'
+        : 'production'
     }/${moment().format(`YYYY-MM-DD_HH_mm_ss`)}_${data.teamName.replace(
       /([/])/,
       '',
