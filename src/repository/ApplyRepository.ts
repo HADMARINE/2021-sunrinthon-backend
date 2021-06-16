@@ -35,7 +35,6 @@ export default class ApplyRepository {
           `YYYY-MM-DD_HH_mm_ss`,
         )}_${data.teamName}_${portFile.name.replace(/[\n\r]+/g, '')}`,
         Body: portFile.data,
-        ContentType: portFile.mimetype,
       });
     } catch {
       throw ErrorDictionary.db.error();

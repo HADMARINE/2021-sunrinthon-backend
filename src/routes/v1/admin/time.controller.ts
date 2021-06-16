@@ -6,30 +6,45 @@ import {
   WrappedRequest,
 } from 'express-quick-builder';
 
-interface TimeControllerInterface {
-  hackathonTime(req: WrappedRequest): Promise<void>;
-  marketTime(req: WrappedRequest): Promise<void>;
-}
-
 @Controller
-export default class TimeController implements TimeControllerInterface {
+export default class TimeController {
   @PostMapping('/start/hackathon')
-  async hackathonTime(req: WrappedRequest): Promise<void> {
+  async hackathonStartTime(req: WrappedRequest): Promise<void> {
     const { value } = req.verify.body({ value: DataTypes.date });
     await Time.findOneAndUpdate(
-      { type: 'hackathon' },
+      { type: 'hackathon-start' },
       { $set: { value } },
       { upsert: true },
     ).exec();
   }
 
   @PostMapping('/start/market')
-  async marketTime(req: WrappedRequest): Promise<void> {
+  async marketStartTime(req: WrappedRequest): Promise<void> {
     const { value } = req.verify.body({ value: DataTypes.date });
     await Time.findOneAndUpdate(
-      { type: 'market' },
+      { type: 'market-start' },
       { $set: { value } },
       { upsert: true },
     ).exec();
+  }
+
+  @PostMapping('/end/hackathon')
+  async hackathonEndTime(req: WrappedRequest): Promise<void> {
+    const { value } = req.verify.body({ value: DataTypes.date });
+    await Time.findOneAndUpdate(
+      { type: 'hackathon-end' },
+      { $set: { value } },
+      { upsert: true },
+    );
+  }
+
+  @PostMapping('/end/hackathon')
+  async marketEndTime(req: WrappedRequest): Promise<void> {
+    const { value } = req.verify.body({ value: DataTypes.date });
+    await Time.findOneAndUpdate(
+      { type: 'market-end' },
+      { $set: { value } },
+      { upsert: true },
+    );
   }
 }
