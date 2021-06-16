@@ -28,14 +28,16 @@ export default class ApplyRepository {
     }
 
     let portResult;
+    console.log('UPLOADSTART');
     try {
       portResult = await Aws.S3.upload({
         Bucket: '2021sunrinhackathon-bigfiles',
         Key: `apply_files/${process.env.NODE_ENV}/${moment().format(
           `YYYY-MM-DD_HH_mm_ss`,
-        )}_${data.teamName}_${portFile.name.replace(/[\n\r]+/g, '')}`,
+        )}_${data.teamName.replace(/([/])/, '')}.pdf`,
         Body: portFile.data,
       });
+      console.log('UPLOADFINISH');
     } catch {
       throw ErrorDictionary.db.error();
     }
