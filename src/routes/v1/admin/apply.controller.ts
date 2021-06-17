@@ -1,10 +1,12 @@
 import { ApplyInterface } from '@models/Apply';
 import ApplyRepository from '@repo/ApplyRepository';
+import { AdminAuthority } from '@util/Middleware';
 import {
   Controller,
   DataTypes,
   DeleteMapping,
   GetMapping,
+  SetMiddleware,
   WrappedRequest,
 } from 'express-quick-builder';
 
@@ -13,12 +15,14 @@ const applyRepository = new ApplyRepository();
 @Controller
 export default class AdminApplyController {
   @GetMapping(':docid')
+  @SetMiddleware(AdminAuthority)
   async getApplyOne(req: WrappedRequest): Promise<ApplyInterface | null> {
     const { docid } = req.verify.params({ docid: DataTypes.string });
     return await applyRepository.getApplyOne({ _id: docid });
   }
 
   @GetMapping()
+  @SetMiddleware(AdminAuthority)
   async getApply(req: WrappedRequest): Promise<ApplyInterface[] | null> {
     const {
       start,
@@ -52,6 +56,7 @@ export default class AdminApplyController {
   }
 
   @DeleteMapping()
+  @SetMiddleware(AdminAuthority)
   async deleteApply(req: WrappedRequest): Promise<null | void> {
     const { docid } = req.verify.body({
       docid: DataTypes.string,
