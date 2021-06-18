@@ -4,6 +4,7 @@ import Assets, { QueryBuilder } from '@util/Assets';
 import Aws from '@util/Aws';
 import { UploadedFile } from 'express-fileupload';
 import moment from 'moment';
+import logger from 'clear-logger';
 
 export default class ApplyRepository {
   async postApply(data: {
@@ -33,18 +34,18 @@ export default class ApplyRepository {
       process.env.NODE_ENV !== 'production'
         ? 'development'
         : 'production'
-    }/${moment().format(`YYYY-MM-DD_HH_mm_ss`)}_${data.teamName.replace(
-      /([/])/,
-      '',
-    )}.pdf`;
+    }/${moment().format(
+      `YYYY-MM-DD_HH_mm_ss`,
+    )}_${`${data.teamName}_${data.name}`.replace(/([/])/, '')}.pdf`;
     try {
       portResult = await Aws.S3.uploadAccelerate({
         Bucket: 'sunrinhackathon-bigfiles',
         Key: `apply_files/${fileName}`,
-        Body: portFile.data,
+        Body: Buffer.from(portFile.data),
         ContentType: portFile.mimetype,
       });
-    } catch {
+    } catch (e) {
+      logger.debug(e);
       throw ErrorDictionary.db.error();
     }
 

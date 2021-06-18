@@ -37,14 +37,14 @@ const REQUEST_HANDLERS = [
   RateLimiter(),
   // Assets.wrapper(ipfilter),
   fileUploader({
-    limits: { fileSize: 50 * 1024 * 1024 },
+    limits: { fileSize: 1000 * 1024 * 1024 },
     useTempFiles: false,
     tempFileDir: '/tmp/file/',
     debug: process.env.NODE_ENV === 'development',
   }),
   express.static('public'),
-  express.json({ limit: '100mb' }),
-  express.urlencoded({ extended: true, limit: '100mb' }),
+  express.json({ limit: '1000mb' }),
+  express.urlencoded({ extended: true, limit: '1000mb' }),
 ];
 
 const STARTUP_EXECUTES = [cron];
