@@ -11,28 +11,35 @@ export interface ApplyInterface {
   portfolio: { Bucket: string; Key: string };
 }
 
-const ApplySchema: Schema = new Schema({
-  studentId: { type: String, required: true },
-  name: { type: String, required: true },
-  teamName: { type: String, required: true },
-  position: { type: String, required: true },
-  clothSize: { type: String, required: true },
-  portfolio: {
-    type: {
-      Bucket: { type: String, required: true },
-      Key: { type: String, required: true },
+const ApplySchema: Schema = new Schema(
+  {
+    studentId: { type: String, required: true },
+    name: { type: String, required: true },
+    teamName: { type: String, required: true },
+    position: { type: String, required: true },
+    clothSize: { type: String, required: true },
+    portfolio: {
+      type: {
+        Bucket: { type: String, required: true },
+        Key: { type: String, required: true },
+      },
+      get: (d: ApplyInterface['portfolio']): string => {
+        if (!d) throw ErrorDictionary.db.notfound();
+        return Aws.S3.getSignedUrlSync({
+          Bucket: d.Bucket,
+          Key: d.Key,
+          Expires: 300,
+        });
+      },
+      // default: { Bucket: 'NULL', Key: 'NULL' },
+      required: true,
     },
-    get: (d: ApplyInterface['portfolio']): string => {
-      if (!d) throw ErrorDictionary.db.notfound();
-      return Aws.S3.getSignedUrlSync({
-        Bucket: d.Bucket,
-        Key: d.Key,
-        Expires: 300,
-      });
-    },
-    required: true,
   },
-});
+  {
+    toObject: { getters: true },
+    toJSON: { getters: true },
+  },
+);
 
 export interface ApplyDocument extends Document, ApplyInterface {
   // Add Methods here
