@@ -153,6 +153,8 @@ export function QueryBuilder<T>(
           });
           if (val.length === 0) return;
           Object.assign(result, { [key]: val });
+        } else if (value === null) {
+          return;
         } else {
           Object.assign(result, { [key]: value });
         }

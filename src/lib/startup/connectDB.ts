@@ -49,7 +49,10 @@ export default async function connectDB(): Promise<void> {
       throw new Error('ENV NOT SET');
     }
 
-    if (process.env.DB_ENV === 'development') {
+    if (
+      process.env.DB_ENV === 'development' ||
+      process.env.NODE_ENV === 'development'
+    ) {
       await connectDBTest();
       dbConnectionStatus = 'CONN_PLAIN_DEV';
       return;
