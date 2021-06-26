@@ -61,7 +61,7 @@ export default class ApplyRepository {
     return true;
   }
 
-  async getApply(
+  async getApplyExcludePortfolio(
     data: Nullish<{
       start: number;
       amount: number;
@@ -72,7 +72,7 @@ export default class ApplyRepository {
       position: string;
       orderBy: string;
     }>,
-  ): Promise<ApplyInterface[] | null> {
+  ): Promise<Omit<ApplyInterface, 'portfolio'>[] | null> {
     enum OrderBy {
       teamname,
       name,
@@ -97,9 +97,16 @@ export default class ApplyRepository {
       .skip((data?.start || 1) - 1)
       .limit(data?.amount || 10)
       .sort(data.orderBy ? `-${data.orderBy}` : undefined)
+      .select('-portfolio')
       .exec();
 
     return apply.length === 0 ? null : apply;
+  }
+
+  async getPortfolioById(data: { _id: string }): Promise<string | null> {
+    const apply = await Apply.findById(data._id).exec();
+    if (!apply) return null;
+    return apply.portfolio as unknown as string;
   }
 
   async getApplyOne(data: { _id: string }): Promise<ApplyInterface | null> {

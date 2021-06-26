@@ -1,3 +1,4 @@
+import ErrorDictionary from '@error/ErrorDictionary';
 import { ApplyInterface } from '@models/Apply';
 import ApplyRepository from '@repo/ApplyRepository';
 import { AdminAuthority } from '@util/Middleware';
@@ -7,8 +8,10 @@ import {
   DeleteMapping,
   GetMapping,
   SetMiddleware,
+  UseCustomHandler,
   WrappedRequest,
 } from 'express-quick-builder';
+import { Request, Response } from 'express';
 
 const applyRepository = new ApplyRepository();
 
@@ -23,7 +26,9 @@ export default class AdminApplyController {
 
   @GetMapping()
   @SetMiddleware(AdminAuthority)
-  async getApply(req: WrappedRequest): Promise<ApplyInterface[] | null> {
+  async getApply(
+    req: WrappedRequest,
+  ): Promise<Omit<ApplyInterface, 'portfolio'>[] | null> {
     const {
       start,
       amount,
@@ -43,7 +48,7 @@ export default class AdminApplyController {
       studentId: DataTypes.stringNull,
       position: DataTypes.stringNull,
     });
-    return await applyRepository.getApply({
+    return await applyRepository.getApplyExcludePortfolio({
       start,
       amount,
       teamName,
@@ -53,6 +58,25 @@ export default class AdminApplyController {
       studentId,
       position,
     });
+  }
+
+  @GetMapping('/portfolio/redirect/:id')
+  @SetMiddleware(AdminAuthority)
+  @UseCustomHandler
+  async getPortfolioByIdRedirect(req: Request, res: Response): Promise<void> {
+    const { id } = req.params;
+    const url = await applyRepository.getPortfolioById({ _id: id });
+    if (!url) throw ErrorDictionary.db.notfound();
+    res.redirect(url);
+  }
+
+  @GetMapping('/portfolio/:id')
+  @SetMiddleware(AdminAuthority)
+  async getPortfolioById(req: WrappedRequest): Promise<string> {
+    const { id } = req.verify.params({ id: DataTypes.string });
+    const url = await applyRepository.getPortfolioById({ _id: id });
+    if (!url) throw ErrorDictionary.db.notfound();
+    return url;
   }
 
   @DeleteMapping()
