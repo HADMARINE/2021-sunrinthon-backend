@@ -97,7 +97,7 @@ export default class ApplyRepository {
       .skip((data?.start || 1) - 1)
       .limit(data?.amount || 10)
       .sort(data.orderBy ? `-${data.orderBy}` : undefined)
-      .select('-portfolio -_id -__v')
+      .select('-portfolio -__v')
       .exec();
 
     return apply.length === 0 ? null : apply;

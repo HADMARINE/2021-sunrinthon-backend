@@ -31,13 +31,24 @@ const ApplySchema: Schema = new Schema(
           Expires: 300,
         });
       },
-      // default: { Bucket: 'NULL', Key: 'NULL' },
       required: true,
     },
   },
   {
-    toObject: { getters: true },
-    toJSON: { getters: true },
+    toObject: {
+      getters: true,
+      virtuals: true,
+      transform: (doc, converted) => {
+        delete converted._id;
+      },
+    },
+    toJSON: {
+      getters: true,
+      virtuals: true,
+      transform: (doc, converted) => {
+        delete converted._id;
+      },
+    },
   },
 );
 
