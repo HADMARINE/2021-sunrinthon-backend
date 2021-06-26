@@ -38,16 +38,10 @@ const ApplySchema: Schema = new Schema(
     toObject: {
       getters: true,
       virtuals: true,
-      transform: (doc, converted) => {
-        delete converted._id;
-      },
     },
     toJSON: {
       getters: true,
       virtuals: true,
-      transform: (doc, converted) => {
-        delete converted._id;
-      },
     },
   },
 );
