@@ -1,17 +1,13 @@
 import checkInitializeProjectSettings from '@lib/startup/checkInitialProjectSettings';
 import io from '@src/io';
-import connectDB, {
-  connectDBTest,
-  wrapConnectDbWithSync,
-} from '@lib/startup/connectDB';
+import { connectDBTest, wrapConnectDbWithSync } from '@lib/startup/connectDB';
 import { ServerStarter } from 'express-quick-builder';
 import cron from '@lib/middlewares/cron';
 import morgan from '@lib/middlewares/morgan';
 import cors from 'cors';
 import helmet from 'helmet';
 import { RateLimiter } from '@util/Middleware';
-import Assets from '@util/Assets';
-import ipfilter from '@lib/middlewares/ipfilter';
+// import ipfilter from '@lib/middlewares/ipfilter';
 import fileUploader from 'express-fileupload';
 import express from 'express';
 import packageJson from '../package.json';
