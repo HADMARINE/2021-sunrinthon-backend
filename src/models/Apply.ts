@@ -1,4 +1,4 @@
-import { model, Schema, Document, HookNextFunction } from 'mongoose';
+import { model, Schema, Document } from 'mongoose';
 import Aws from '@util/Aws';
 import ErrorDictionary from '@error/ErrorDictionary';
 
@@ -38,16 +38,10 @@ const ApplySchema: Schema = new Schema(
     toObject: {
       getters: true,
       virtuals: true,
-      transform: (doc, converted) => {
-        delete converted._id;
-      },
     },
     toJSON: {
       getters: true,
       virtuals: true,
-      transform: (doc, converted) => {
-        delete converted._id;
-      },
     },
   },
 );
