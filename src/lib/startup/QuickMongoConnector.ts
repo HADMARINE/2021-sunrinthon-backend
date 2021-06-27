@@ -50,7 +50,7 @@ export default async function connectDB(): Promise<void> {
     }
 
     if (
-      process.env.DB_ENV === 'development' ||
+      process.env.DB_ENV !== 'production' ||
       process.env.NODE_ENV === 'development'
     ) {
       await connectDBTest();
@@ -164,7 +164,7 @@ export const wrapConnectDbWithSync = (): void => {
     // @ts-ignore
     if (STATUS === status.ERROR) throw new Error('Mongodb connection failed');
   }
-  logger.debug('Mongodb Database Connected', false);
+  logger.debug(`MongoDB Connected. MODE:[ ${dbConnectionStatus} ]`, false);
 };
 
 export const connectDBTest = (): Promise<typeof mongoose | undefined> => {
