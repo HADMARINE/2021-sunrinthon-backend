@@ -24,24 +24,26 @@ do
   sleep 10
 done
 
-RESPONSE=$(curl -s http://localhost/info/database)
+exit 0 
 
-if [ $DB_ENV = 'production' ] ; then 
-  if [ $RESPONSE = 'CONN_SSL' ]; then
-    echo "DB Connection successful"
-    exit 0
-  else
-    echo "DB Connection invalid"
-    exit 1
-  fi
-else
-  if [ $RESPONSE = 'CONN_PLAIN_DEV' ]; then
-    echo "DEVELOPMENT MODE"
-    echo "DB Connection successful"
-    exit 0
-  else
-    echo "DB Connection invalid"
-    exit 1
-  fi
-fi
-exit 0
+# RESPONSE=$(curl -s http://localhost/info/database)
+
+# if [ $DB_ENV = 'production' ]; then 
+#   if [ $RESPONSE = 'CONN_SSL' ]; then
+#     echo "DB Connection successful"
+#     exit 0
+#   else
+#     echo "DB Connection invalid"
+#     exit 1
+#   fi
+# else
+#   if [ $RESPONSE = 'CONN_PLAIN_DEV' ]; then
+#     echo "DEVELOPMENT MODE"
+#     echo "DB Connection successful"
+#     exit 0
+#   else
+#     echo "DB Connection invalid"
+#     exit 1
+#   fi
+# fi
+# exit 0

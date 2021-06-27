@@ -11,7 +11,7 @@ import {
   WrappedRequest,
   DataTypes,
 } from 'express-quick-builder';
-import { dbConnectionStatus } from '@lib/startup/connectDB';
+import { dbConnectionStatus } from '@lib/startup/QuickMongoConnector';
 @Controller
 export default class IndexController {
   @AllMapping()

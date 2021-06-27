@@ -1,6 +1,9 @@
 import checkInitializeProjectSettings from '@lib/startup/checkInitialProjectSettings';
 import io from '@src/io';
-import { connectDBTest, wrapConnectDbWithSync } from '@lib/startup/connectDB';
+import {
+  connectDBTest,
+  wrapConnectDbWithSync,
+} from '@lib/startup/QuickMongoConnector';
 import { ServerStarter } from 'express-quick-builder';
 import cron from '@lib/middlewares/cron';
 import morgan from '@lib/middlewares/morgan';
