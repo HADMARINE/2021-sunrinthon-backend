@@ -24,27 +24,36 @@ const PORT: number = parseInt(
   10,
 );
 
-const REQUEST_HANDLERS = [
-  morgan(),
-  cors({
-    origin:
-      process.env.NODE_ENV === 'development'
-        ? '*'
-        : process.env.REQUEST_URI || '*',
-  }),
-  helmet(),
-  RateLimiter(),
-  // Assets.wrapper(ipfilter),
-  fileUploader({
-    limits: { fileSize: 1000 * 1024 * 1024 },
-    useTempFiles: false,
-    tempFileDir: '/tmp/file/',
-    debug: process.env.NODE_ENV === 'development',
-  }),
-  express.static('public'),
-  express.json({ limit: '1000mb' }),
-  express.urlencoded({ extended: true, limit: '1000mb' }),
-];
+const REQUEST_HANDLERS: Parameters<typeof ServerStarter>[0]['requestHandlers'] =
+  [
+    morgan(),
+    cors({
+      origin:
+        process.env.NODE_ENV === 'development'
+          ? '*'
+          : process.env.REQUEST_URI || '*',
+    }),
+    helmet(),
+    RateLimiter(),
+    // Assets.wrapper(ipfilter),
+    fileUploader({
+      limits: { fileSize: 1000 * 1024 * 1024 },
+      useTempFiles: false,
+      tempFileDir: '/tmp/file/',
+      debug: process.env.NODE_ENV === 'development',
+    }),
+    express.static('public'),
+    express.json({ limit: '1000mb' }),
+    express.urlencoded({ extended: true, limit: '1000mb' }),
+  ];
+
+if (process.env.NODE_ENV === 'development') {
+  REQUEST_HANDLERS.push([
+    '/info/coverage',
+    express.static('reports/coverage/lcov-report'),
+  ]);
+  REQUEST_HANDLERS.push(['/info/test', express.static('reports/test')]);
+}
 
 const STARTUP_EXECUTES = [cron];
 
