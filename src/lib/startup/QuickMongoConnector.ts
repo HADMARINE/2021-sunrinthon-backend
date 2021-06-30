@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import mongoose from 'mongoose';
 import fs from 'fs';
 import tunnel from 'tunnel-ssh';
