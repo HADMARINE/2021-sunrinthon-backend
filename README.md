@@ -1,5 +1,5 @@
 # 2021-sunrinthon-backend
 
-![Build Status](https://codebuild.ap-northeast-2.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiei9GaURqU0pvTGoraStaYkpOa3hUN1lYTnVvL3hJVDlHNVcrZ0VlTW5STHczNXJGaXgrK1hhdUlMWk5EcTc5dFF0N0hvQWVIREJQRmFIYUNOVHpHRTVRPSIsIml2UGFyYW1ldGVyU3BlYyI6ImFuUCt1S2JUeTQ1SmNJWUIiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=main)
+[![sunrinhackathon](https://circleci.com/gh/sunrinhackathon/2021-sunrinthon-backend.svg?style=svg)](https://app.circleci.com/pipelines/github/sunrinhackathon/2021-sunrinthon-backend)
 
 TODO : develop key manager
