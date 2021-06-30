@@ -103,7 +103,7 @@ export default class ApplyRepository {
       .select('-portfolio -__v')
       .exec();
 
-    const length = await Apply.count(query).exec();
+    const length = await Apply.countDocuments(query).exec();
 
     return apply.length === 0 ? null : { docs: apply, length };
   }
