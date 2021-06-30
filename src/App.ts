@@ -34,7 +34,7 @@ const REQUEST_HANDLERS: Parameters<typeof ServerStarter>[0]['requestHandlers'] =
           : process.env.REQUEST_URI || '*',
     }),
     helmet(),
-    RateLimiter(),
+    RateLimiter(1, 100),
     // Assets.wrapper(ipfilter),
     fileUploader({
       limits: { fileSize: 1000 * 1024 * 1024 },
