@@ -31,7 +31,7 @@ jobs:
           name: Build
           command: yarn build
       - store_test_results:
-          path: ./reports/junit/test.xml
+          path: ./reports/junit
 workflows:
   test-build-deployment:
     jobs:
