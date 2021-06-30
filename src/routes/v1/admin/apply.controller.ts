@@ -28,7 +28,10 @@ export default class AdminApplyController {
   @SetMiddleware(AdminAuthority)
   async getApply(
     req: WrappedRequest,
-  ): Promise<Omit<ApplyInterface, 'portfolio'>[] | null> {
+  ): Promise<{
+    docs: Omit<ApplyInterface, 'portfolio'>[];
+    length: number;
+  } | null> {
     const {
       start,
       amount,

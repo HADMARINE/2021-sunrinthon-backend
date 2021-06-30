@@ -72,7 +72,10 @@ export default class ApplyRepository {
       position: string;
       orderBy: string;
     }>,
-  ): Promise<Omit<ApplyInterface, 'portfolio'>[] | null> {
+  ): Promise<{
+    docs: Omit<ApplyInterface, 'portfolio'>[];
+    length: number;
+  } | null> {
     enum OrderBy {
       teamname,
       name,
@@ -85,22 +88,24 @@ export default class ApplyRepository {
       throw ErrorDictionary.data.parameterInvalid('orderby');
     }
 
-    const apply = await Apply.find(
-      QueryBuilder({
-        teamName: data.teamName,
-        name: data.name,
-        clothSize: data.clothSize,
-        studentId: data.studentId,
-        position: data.position,
-      }),
-    )
+    const query = QueryBuilder({
+      teamName: data.teamName,
+      name: data.name,
+      clothSize: data.clothSize,
+      studentId: data.studentId,
+      position: data.position,
+    });
+
+    const apply = await Apply.find(query)
       .skip((data?.start || 1) - 1)
       .limit(data?.amount || 10)
       .sort(data.orderBy ? `-${data.orderBy}` : undefined)
       .select('-portfolio -__v')
       .exec();
 
-    return apply.length === 0 ? null : apply;
+    const length = await Apply.count(query).exec();
+
+    return apply.length === 0 ? null : { docs: apply, length };
   }
 
   async getPortfolioById(data: { _id: string }): Promise<string | null> {
