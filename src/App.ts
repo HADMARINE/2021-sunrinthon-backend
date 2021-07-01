@@ -1,4 +1,6 @@
 import checkInitializeProjectSettings from '@lib/startup/checkInitialProjectSettings';
+checkInitializeProjectSettings();
+
 import io from '@src/io';
 import {
   connectDBTest,
@@ -14,8 +16,6 @@ import { RateLimiter } from '@util/Middleware';
 import fileUploader from 'express-fileupload';
 import express from 'express';
 import packageJson from '../package.json';
-
-checkInitializeProjectSettings();
 
 const PORT: number = parseInt(
   process.env.NODE_ENV === 'production'

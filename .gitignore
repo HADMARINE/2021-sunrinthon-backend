@@ -15,3 +15,5 @@ dist
 
 rds-combined-ca-bundle.pem
 .sshkey.pem
+
+qcert.key

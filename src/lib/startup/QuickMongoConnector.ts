@@ -47,7 +47,7 @@ export default async function connectDB(): Promise<void> {
       !process.env.DB_USER ||
       !process.env.DB_PASS
     ) {
-      throw new Error('ENV NOT SET');
+      throw new Error('MONGO ENV NOT SET');
     }
 
     if (
