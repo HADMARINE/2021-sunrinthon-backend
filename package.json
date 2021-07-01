@@ -11,11 +11,7 @@
     "tsc": "tsc",
     "lint": "eslint -c .eslintrc.js --ext .ts ./src",
     "test": "NODE_ENV=test npx jest --config ./jest.config.js --watch --forceExit --testTimeout=10000",
-    "test-auto": "NODE_ENV=test npx jest --config ./jest.config.js --forceExit --detectOpenHandles",
-    "dec:env": "quickcert.js decrypt",
-    "berry": "yarn set version berry",
-    "latest": "yarn set version latest",
-    "classic": "yarn set version classic"
+    "test-auto": "NODE_ENV=test npx jest --config ./jest.config.js --forceExit --detectOpenHandles"
   },
   "dependencies": {
     "aws-sdk": "^2.936.0",
@@ -41,7 +37,7 @@
     "nodemon": "^2.0.8",
     "pm2": "^5.1.0",
     "portfinder": "^1.0.28",
-    "quickcert.js": "^0.1.1",
+    "quickcert.js": "^0.3.1",
     "require-strip-json-comments": "^2.0.0",
     "socket.io": "^4.1.2",
     "strip-json-comments": "^3.1.1",
