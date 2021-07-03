@@ -1,19 +1,22 @@
 .DS_Store
-node_modules
-reports
-
-.env
-yarn-error.log
-
 .idea
 
-tmp
-
+node_modules
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+yarn-error.log
 package-lock.json
 
+reports
+tmp
 dist
 
-rds-combined-ca-bundle.pem
-.sshkey.pem
-
 qcert.key
+.env
+.sshkey.pem
+rds-combined-ca-bundle.pem
