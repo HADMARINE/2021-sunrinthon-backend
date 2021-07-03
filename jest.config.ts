@@ -1,6 +1,6 @@
 /** @type {import('@jest/types').Config.InitialOptions} */
 require('./.pnp.js').setup();
-const { pathsToModuleNameMapper } = require('ts-jest/utils');
+import { pathsToModuleNameMapper } from 'ts-jest/utils'
 const requireJSON = require('require-strip-json-comments');
 const { compilerOptions } = requireJSON('./tsconfig.json');
 

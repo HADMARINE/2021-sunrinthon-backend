@@ -10,8 +10,8 @@
     "build": "babel src --out-dir dist --extensions '.ts'",
     "tsc": "tsc",
     "lint": "eslint -c .eslintrc.js --ext .ts ./src",
-    "test": "NODE_ENV=test npx jest --config ./jest.config.js --watch --forceExit --testTimeout=10000",
-    "test-auto": "NODE_ENV=test npx jest --config ./jest.config.js --forceExit --detectOpenHandles"
+    "test": "NODE_ENV=test npx jest --config ./jest.config.ts --watch --forceExit --testTimeout=10000",
+    "test-auto": "NODE_ENV=test npx jest --config ./jest.config.ts --forceExit --detectOpenHandles"
   },
   "dependencies": {
     "aws-sdk": "^2.936.0",
