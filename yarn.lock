@@ -61,6 +61,7 @@ __metadata:
     mongoose: ^5.13.0
     morgan: ^1.10.0
     node-cron: ^3.0.0
+    node-gyp: ^8.1.0
     nodemon: ^2.0.8
     pm2: ^5.1.0
     portfinder: ^1.0.28
@@ -8219,7 +8220,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-gyp@npm:latest":
+"node-gyp@npm:^8.1.0, node-gyp@npm:latest":
   version: 8.1.0
   resolution: "node-gyp@npm:8.1.0"
   dependencies:
