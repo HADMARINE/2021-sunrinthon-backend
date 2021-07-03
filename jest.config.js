@@ -24,14 +24,14 @@ module.exports = {
   reporters: [
     'default',
     [
-      'jest-html-reporter',
+      require.resolve('jest-html-reporter'),
       {
         pageTitle: 'Test Report',
         outputPath: './reports/test/index.html',
       },
     ],
     [
-      'jest-junit',
+      require.resolve('jest-junit'),
       { outputDirectory: './reports/junit', outputName: 'results.xml' },
     ],
   ],
