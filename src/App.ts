@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('../.pnp.js').setup();
 import checkInitializeProjectSettings from '@lib/startup/checkInitialProjectSettings';
 checkInitializeProjectSettings();
 
