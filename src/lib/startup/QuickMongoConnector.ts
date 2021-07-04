@@ -35,7 +35,7 @@ if (env === 'development') {
 
 export default async function connectDB(): Promise<void> {
   try {
-    if (process.env.TEST_DB_HOST && process.env.NODE_ENV !== "production" || process.env.DB_ENV !== "production") {
+    if (process.env.TEST_DB_HOST && process.env.NODE_ENV !== "production" || process.env.DB_ENV === "development") {
       await connectDBTest();
       dbConnectionStatus = 'CONN_PLAIN_DEV';
       return;
