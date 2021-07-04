@@ -8,6 +8,7 @@ module.exports = {
       instances: 'max',
       script: './dist/index.js',
       watch: false,
+      interpreter: 'bash',
       env: {
         NODE_ENV: 'production',
       },
