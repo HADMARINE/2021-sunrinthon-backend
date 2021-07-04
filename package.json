@@ -35,7 +35,7 @@
     "morgan": "^1.10.0",
     "node-cron": "^3.0.0",
     "node-gyp": "^8.1.0",
-    "nodemon": "^2.0.8",
+    "nodemon": "^2.0.9",
     "pm2": "^5.1.0",
     "portfinder": "^1.0.28",
     "quickcert.js": "^0.3.1",
