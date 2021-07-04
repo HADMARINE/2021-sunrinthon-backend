@@ -20,6 +20,8 @@ gulp.task('build_main', () => {
 });
 
 gulp.task('build_post', (done) => {
+  // FOR Plug_N_Play
+
   const indexFileRoot = path.join(tsProject.options.outDir, '/index.js');
 
   const indexFile = fs.readFileSync(indexFileRoot).toString();
