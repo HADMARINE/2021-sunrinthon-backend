@@ -20,20 +20,18 @@ module.exports = {
   setupFilesAfterEnv: ['jest-expect-message'],
   collectCoverage: true,
   coverageDirectory: './reports/coverage',
-  reporters: process.env.CODEBUILD_START_TIME
-    ? undefined
-    : [
-        'default',
-        [
-          'jest-html-reporter',
-          {
-            pageTitle: 'Test Report',
-            outputPath: './reports/test/index.html',
-          },
-        ],
-        [
-          'jest-junit',
-          { outputDirectory: './reports/junit', outputName: 'results.xml' },
-        ],
-      ],
+  reporters: [
+    'default',
+    [
+      'jest-html-reporter',
+      {
+        pageTitle: 'Test Report',
+        outputPath: './reports/test/index.html',
+      },
+    ],
+    [
+      'jest-junit',
+      { outputDirectory: './reports/junit', outputName: 'results.xml' },
+    ],
+  ],
 };
