@@ -1,6 +1,5 @@
 /** @type {import('@jest/types').Config.InitialOptions} */
-require('./.pnp.js').setup();
-import { pathsToModuleNameMapper } from 'ts-jest/utils'
+const { pathsToModuleNameMapper } = require('ts-jest/utils');
 const requireJSON = require('require-strip-json-comments');
 const { compilerOptions } = requireJSON('./tsconfig.json');
 
@@ -24,14 +23,14 @@ module.exports = {
   reporters: [
     'default',
     [
-      require.resolve('jest-html-reporter'),
+      'jest-html-reporter',
       {
         pageTitle: 'Test Report',
         outputPath: './reports/test/index.html',
       },
     ],
     [
-      require.resolve('jest-junit'),
+      'jest-junit',
       { outputDirectory: './reports/junit', outputName: 'results.xml' },
     ],
   ],
