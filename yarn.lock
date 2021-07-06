@@ -71,7 +71,7 @@ __metadata:
     pm2: ^5.1.0
     portfinder: ^1.0.28
     prettier: ^2.3.2
-    quickcert: ^1.0.0
+    quickcert: ^1.0.1
     require-strip-json-comments: ^2.0.0
     socket.io: ^4.1.2
     strip-json-comments: ^3.1.1
@@ -10271,9 +10271,9 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"quickcert@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "quickcert@npm:1.0.0"
+"quickcert@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "quickcert@npm:1.0.1"
   dependencies:
     "@types/prompts": ^2.0.13
     boxen: ^5.0.1
@@ -10283,7 +10283,7 @@ fsevents@^1.2.7:
     yargs: ^17.0.1
   bin:
     quickcert: dist/cli/index.js
-  checksum: 998fa0b4eab155934092424d3fd8bfdc622c9b77d8160fd22381f42fd9e004e9524275ce7b73720a3ae20a7079f1de1cc6730f32ab1a1a854caef4fe403dfb48
+  checksum: d4b6e0a07fa28aa6e304c8d21d2890d5ee82cf16d62142e2289efc3e054305dac910d895a93a7e3d2ce2ec7517980b5189e34809acc485c8cb237a6c7f159e1f
   languageName: node
   linkType: hard
 
