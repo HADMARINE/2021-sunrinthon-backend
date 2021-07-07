@@ -29,14 +29,13 @@ export default class ApplyRepository {
     }
 
     let portResult;
-    const fileName = `${
-      process.env.DB_ENV === 'development' ||
+    const fileName = `${process.env.DB_ENV === 'development' ||
       process.env.NODE_ENV !== 'production'
-        ? 'development'
-        : 'production'
-    }/${moment().format(
-      `YYYY-MM-DD_HH_mm_ss`,
-    )}_${`${data.teamName}_${data.name}`.replace(/([/])/, '')}.pdf`;
+      ? 'development'
+      : 'production'
+      }/${moment().format(
+        `YYYY-MM-DD_HH_mm_ss`,
+      )}_${`${data.teamName}_${data.name}`.replace(/([/])/, '')}.pdf`;
     try {
       portResult = await Aws.S3.uploadAccelerate({
         Bucket: 'sunrinhackathon-bigfiles',
@@ -100,22 +99,22 @@ export default class ApplyRepository {
       .skip((data?.start || 1) - 1)
       .limit(data?.amount || 10)
       .sort(data.orderBy ? `-${data.orderBy}` : undefined)
-      .select('-portfolio -__v')
+      .select('-portfolio -__v -deleted')
       .exec();
 
-    const length = await Apply.countDocuments(query).exec();
+    const length = await Apply.countDocuments(query);
 
     return apply.length === 0 ? null : { docs: apply, length };
   }
 
   async getPortfolioById(data: { _id: string }): Promise<string | null> {
-    const apply = await Apply.findById(data._id).exec();
+    const apply = await Apply.findById(data._id);
     if (!apply) return null;
     return apply.portfolio as unknown as string;
   }
 
   async getApplyOne(data: { _id: string }): Promise<ApplyInterface | null> {
-    const apply = await Apply.findById(data._id).exec();
+    const apply = await Apply.findById(data._id);
     return apply;
   }
 
@@ -128,12 +127,12 @@ export default class ApplyRepository {
   }
 
   async deleteApply(data: { _id: string }): Promise<boolean> {
-    const apply = await Apply.findByIdAndDelete(data._id).exec();
+    const apply = await Apply.deleteById(data._id);
     return apply ? true : false;
   }
 
   async deleteApplyMany(data: { _id: string[] }): Promise<number> {
-    const apply = await Apply.deleteMany({ _id: { $or: data._id } }).exec();
+    const apply = await Apply.deleteMany({ _id: { $or: data._id } });
     return apply.deletedCount || 0;
   }
 }

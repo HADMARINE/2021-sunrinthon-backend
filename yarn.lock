@@ -28,6 +28,7 @@ __metadata:
     "@types/jest": ^26.0.23
     "@types/jest-expect-message": ^1.0.3
     "@types/jsonwebtoken": ^8.5.3
+    "@types/mongoose-delete": ^0.5.3
     "@types/morgan": ^1.9.2
     "@types/node": ^16.0.0
     "@types/node-cron": ^2.0.3
@@ -64,6 +65,7 @@ __metadata:
     jsonwebtoken: ^8.5.1
     moment: ^2.29.1
     mongoose: ^5.13.2
+    mongoose-delete: ^0.5.3
     morgan: ^1.10.0
     node-cron: ^3.0.0
     node-gyp: ^8.1.0
@@ -2586,6 +2588,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/mongodb@npm:*":
+  version: 3.6.20
+  resolution: "@types/mongodb@npm:3.6.20"
+  dependencies:
+    "@types/bson": "*"
+    "@types/node": "*"
+  checksum: ee78b69d894ab53d0ea17d155005babdf8b36aa04f1f60c1a197a1b57e9da70bc89bce381a95357fe01aec79800a8c2df1b615e4779c39263236749402d4a78b
+  languageName: node
+  linkType: hard
+
 "@types/mongodb@npm:^3.5.27":
   version: 3.6.17
   resolution: "@types/mongodb@npm:3.6.17"
@@ -2593,6 +2605,25 @@ __metadata:
     "@types/bson": "*"
     "@types/node": "*"
   checksum: c96504ab4b3a07d1bee2a9614c55ec12a035d4564999fb3f6bfdf61ccc71c24bcbaa2af2ae177de44a7b4987397794f51e067533de45db5e995aadc2a3764af8
+  languageName: node
+  linkType: hard
+
+"@types/mongoose-delete@npm:^0.5.3":
+  version: 0.5.3
+  resolution: "@types/mongoose-delete@npm:0.5.3"
+  dependencies:
+    "@types/mongoose": 5.10.5
+  checksum: 6e18ba144d972012d7a4dbf7d0fd5c67f8d5d56e84b07059c1778d52496d185efee0076bb414e4aaf3dd997baab29dde4dafa0db1adb93d366b48cae9aae5068
+  languageName: node
+  linkType: hard
+
+"@types/mongoose@npm:5.10.5":
+  version: 5.10.5
+  resolution: "@types/mongoose@npm:5.10.5"
+  dependencies:
+    "@types/mongodb": "*"
+    "@types/node": "*"
+  checksum: dbc325c71c5069652eb668479795569f721f7e7ffa1243d84b0a01b67545653b01956616b5b94bc7f9a80d54122b8bfa54369b41959e585a424c4d4a8df1b9fc
   languageName: node
   linkType: hard
 
@@ -8975,6 +9006,15 @@ fsevents@^1.2.7:
     snappy:
       optional: true
   checksum: 45ae28f921ff1f7cc35cc4b58bf9010d551a7e727ecaa5ad501c556c6693c45b4006798e5b22759ca26327a2fbe71dde8164e3e976c247be194e220b2715a5a4
+  languageName: node
+  linkType: hard
+
+"mongoose-delete@npm:^0.5.3":
+  version: 0.5.3
+  resolution: "mongoose-delete@npm:0.5.3"
+  peerDependencies:
+    mongoose: 4.x || 5.x
+  checksum: e687afb8e646038e1d3b098831c740bdebfc3773a9e6438b6c6d0d2dc806fc544c667c75ebff95b839d937b64e2cb7033b113f972abb40122f5092ab02aa4777
   languageName: node
   linkType: hard
 

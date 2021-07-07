@@ -1,6 +1,7 @@
 import { model, Schema, Document } from 'mongoose';
 import Aws from '@util/Aws';
 import ErrorDictionary from '@error/ErrorDictionary';
+import mongoose_delete, { SoftDeleteModel } from 'mongoose-delete';
 
 export interface ApplyInterface {
   studentId: string;
@@ -11,7 +12,7 @@ export interface ApplyInterface {
   portfolio: { Bucket: string; Key: string };
 }
 
-const ApplySchema: Schema = new Schema(
+const ApplySchema = new Schema(
   {
     studentId: { type: String, required: true },
     name: { type: String, required: true },
@@ -33,6 +34,7 @@ const ApplySchema: Schema = new Schema(
       },
       required: true,
     },
+    deleted: { type: Boolean, default: false }
   },
   {
     toObject: {
@@ -45,6 +47,8 @@ const ApplySchema: Schema = new Schema(
     },
   },
 );
+
+ApplySchema.plugin(mongoose_delete, { overrideMethods: 'all' })
 
 export interface ApplyDocument extends Document, ApplyInterface {
   // Add Methods here
@@ -68,4 +72,4 @@ export interface ApplyDocument extends Document, ApplyInterface {
 
 const Apply = model<ApplyDocument>('Apply', ApplySchema);
 
-export default Apply;
+export default Apply as SoftDeleteModel<ApplyDocument>;
