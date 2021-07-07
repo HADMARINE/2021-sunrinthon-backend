@@ -82,13 +82,13 @@ export default class AdminApplyController {
     return url;
   }
 
-  @DeleteMapping()
+  @DeleteMapping(':id')
   @SetMiddleware(AdminAuthority)
   async deleteApply(req: WrappedRequest): Promise<null | void> {
-    const { docid } = req.verify.body({
-      docid: DataTypes.string,
+    const { id } = req.verify.params({
+      id: DataTypes.string,
     });
-    const result = await applyRepository.deleteApply({ _id: docid });
+    const result = await applyRepository.deleteApply({ _id: id });
     return result ? undefined : null;
   }
 }
