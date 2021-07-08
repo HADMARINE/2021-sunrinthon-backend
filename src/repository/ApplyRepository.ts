@@ -15,6 +15,7 @@ export default class ApplyRepository {
     portfolio: UploadedFile;
     clothSize: string;
     phoneNumber: string;
+    field: string;
   }): Promise<boolean> {
     if (!Assets.data.verify.phone(data.phoneNumber)) {
       throw ErrorDictionary.data.parameterInvalid(`phoneNumber`);
@@ -55,6 +56,8 @@ export default class ApplyRepository {
       position: data.position,
       portfolio: { Key: portResult.Key, Bucket: portResult.Bucket },
       clothSize: data.clothSize,
+      phoneNumber: data.phoneNumber,
+      field: data.field
     });
 
     return true;
@@ -70,6 +73,8 @@ export default class ApplyRepository {
       studentId: string;
       position: string;
       orderBy: string;
+      field: string;
+      phoneNumber: string;
     }>,
   ): Promise<{
     docs: Omit<ApplyInterface, 'portfolio'>[];
@@ -93,6 +98,8 @@ export default class ApplyRepository {
       clothSize: data.clothSize,
       studentId: data.studentId,
       position: data.position,
+      field: data.field,
+      phoneNumber: data.phoneNumber
     });
 
     const apply = await Apply.find(query)
