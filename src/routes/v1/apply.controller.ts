@@ -18,7 +18,7 @@ const applyRepository = new ApplyRepository();
 export default class ApplyController implements ApplyControllerInterface {
   @PostMapping()
   async postApply(req: WrappedRequest): Promise<void> {
-    const { studentId, name, teamName, position, clothSize, phoneNumber } =
+    const { studentId, name, teamName, position, clothSize, phoneNumber, field } =
       req.verify.body({
         studentId: DataTypes.string,
         name: DataTypes.string,
@@ -26,6 +26,7 @@ export default class ApplyController implements ApplyControllerInterface {
         position: DataTypes.string,
         clothSize: DataTypes.string,
         phoneNumber: DataTypes.string,
+        field: DataTypes.string
       });
     const portfolio = req.files?.portfolio as UploadedFile | undefined;
 
@@ -41,6 +42,7 @@ export default class ApplyController implements ApplyControllerInterface {
       portfolio,
       clothSize,
       phoneNumber,
+      field,
     });
 
     if (result) {
