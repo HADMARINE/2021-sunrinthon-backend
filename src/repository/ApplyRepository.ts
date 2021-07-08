@@ -19,6 +19,7 @@ export default class ApplyRepository {
     field: string;
   }): Promise<boolean> {
     const hackathonStart = await Time.findOne({ type: "hackathon-start" });
+
     if (hackathonStart) {
       if (Date.now() > hackathonStart.value.getTime()) {
         throw ErrorDictionary.rule.timeExpired()
@@ -57,6 +58,12 @@ export default class ApplyRepository {
     } catch (e) {
       logger.debug(e);
       throw ErrorDictionary.db.error();
+    }
+
+    const existResult = await Apply.findOne({ studentId: data.studentId, name: data.name });
+
+    if (existResult) {
+      await Apply.deleteById(existResult._id);
     }
 
     await Apply.create({
