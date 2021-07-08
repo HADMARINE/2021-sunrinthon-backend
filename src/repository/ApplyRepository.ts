@@ -5,6 +5,7 @@ import Aws from '@util/Aws';
 import { UploadedFile } from 'express-fileupload';
 import moment from 'moment';
 import logger from 'clear-logger';
+import Time from '@models/Time';
 
 export default class ApplyRepository {
   async postApply(data: {
@@ -17,6 +18,15 @@ export default class ApplyRepository {
     phoneNumber: string;
     field: string;
   }): Promise<boolean> {
+    const hackathonStart = await Time.findOne({ type: "hackathon-start" });
+    if (hackathonStart) {
+      if (Date.now() > hackathonStart.value.getTime()) {
+        throw ErrorDictionary.rule.timeExpired()
+      }
+    }
+
+
+
     if (!Assets.data.verify.phone(data.phoneNumber)) {
       throw ErrorDictionary.data.parameterInvalid(`phoneNumber`);
     }

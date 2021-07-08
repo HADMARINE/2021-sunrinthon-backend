@@ -76,8 +76,7 @@ export default {
   db: {
     create(collection: string | null = null): Error {
       return ErrorBuilder(
-        `Failed to save data${
-          collection ? ` of ${collection}` : ``
+        `Failed to save data${collection ? ` of ${collection}` : ``
         } to Database.`,
         500,
         'DATABASE_SAVE_FAIL',
@@ -112,4 +111,8 @@ export default {
     S3: (message = `Uploading file failed.`): Error =>
       ErrorBuilder(message, 500, `FILE_PROCESS_FAIL`),
   },
+  rule: {
+    timeExpired: (): Error =>
+      ErrorBuilder(`Time expired`, 400, `TIME_EXPIRED`)
+  }
 };
