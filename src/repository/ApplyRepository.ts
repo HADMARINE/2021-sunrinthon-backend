@@ -107,6 +107,7 @@ export default class ApplyRepository {
       .limit(data?.amount || 10)
       .sort(data.orderBy ? `-${data.orderBy}` : undefined)
       .select('-portfolio -__v -deleted')
+      .sort(`${data?.orderBy}`)
       .exec();
 
     const length = await Apply.countDocuments(query);

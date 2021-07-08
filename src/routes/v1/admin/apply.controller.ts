@@ -41,6 +41,8 @@ export default class AdminApplyController {
       clothSize,
       studentId,
       position,
+      field,
+      phoneNumber
     } = req.verify.query({
       start: DataTypes.numberNull,
       amount: DataTypes.numberNull,
@@ -50,6 +52,8 @@ export default class AdminApplyController {
       clothSize: DataTypes.stringNull,
       studentId: DataTypes.stringNull,
       position: DataTypes.stringNull,
+      field: DataTypes.stringNull,
+      phoneNumber: DataTypes.stringNull
     });
     return await applyRepository.getApplyExcludePortfolio({
       start,
@@ -60,6 +64,8 @@ export default class AdminApplyController {
       clothSize,
       studentId,
       position,
+      field,
+      phoneNumber
     });
   }
 
