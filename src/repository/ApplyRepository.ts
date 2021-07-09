@@ -147,7 +147,7 @@ export default class ApplyRepository {
 
   async updateApply(data: {
     _id: string;
-    document: Nullish<Partial<ApplyInterface>>;
+    document: Partial<Nullish<ApplyInterface>>;
   }): Promise<void | null> {
     const apply = await Apply.findByIdAndUpdate(data._id, Assets.updateQueryBuilder(data.document));
     return apply ? undefined : null;
