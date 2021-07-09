@@ -70,6 +70,12 @@ export default class AdminApplyController {
     });
   }
 
+  @GetMapping('/unique/team')
+  @SetMiddleware(AdminAuthority)
+  async getApplyUniqueTeam(): Promise<number | null> {
+    return await applyRepository.getUniqueTeamName();
+  }
+
   @PatchMapping(':id')
   @SetMiddleware(AdminAuthority)
   async patchPortfolio(req: WrappedRequest): Promise<null | void> {
@@ -86,6 +92,7 @@ export default class AdminApplyController {
 
     return await applyRepository.updateApply({ _id: id, document: doc });
   }
+
 
 
   @GetMapping('/portfolio/redirect/:id')

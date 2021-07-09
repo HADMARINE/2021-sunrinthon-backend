@@ -130,6 +130,10 @@ export default class ApplyRepository {
     return apply.length === 0 ? null : { docs: apply, length };
   }
 
+  async getUniqueTeamName(): Promise<number> {
+    return (await Apply.find({}).distinct('teamName')).length
+  }
+
   async getPortfolioById(data: { _id: string }): Promise<string | null> {
     const apply = await Apply.findById(data._id);
     if (!apply) return null;
