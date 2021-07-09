@@ -149,7 +149,7 @@ export default class ApplyRepository {
     _id: string;
     document: Nullish<Partial<ApplyInterface>>;
   }): Promise<void | null> {
-    const apply = await Apply.findByIdAndUpdate(data._id, document);
+    const apply = await Apply.findByIdAndUpdate(data._id, Assets.updateQueryBuilder(data.document));
     return apply ? undefined : null;
   }
 
