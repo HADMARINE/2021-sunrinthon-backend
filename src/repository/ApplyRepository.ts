@@ -26,8 +26,6 @@ export default class ApplyRepository {
       }
     }
 
-
-
     if (!Assets.data.verify.phone(data.phoneNumber)) {
       throw ErrorDictionary.data.parameterInvalid(`phoneNumber`);
     }
@@ -120,11 +118,11 @@ export default class ApplyRepository {
     });
 
     const apply = await Apply.find(query)
+      .sort(`${data?.orderBy}`)
       .skip((data?.start || 1) - 1)
       .limit(data?.amount || 10)
       .sort(data.orderBy ? `-${data.orderBy}` : undefined)
       .select('-portfolio -__v -deleted')
-      .sort(`${data?.orderBy}`)
       .exec();
 
     const length = await Apply.countDocuments(query);
