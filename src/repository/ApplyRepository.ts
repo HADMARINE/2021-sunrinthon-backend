@@ -120,7 +120,7 @@ export default class ApplyRepository {
     const apply = await Apply.find(query)
       .sort(`${data?.orderBy}`)
       .skip((data?.start || 1) - 1)
-      .limit(data?.amount || 10)
+      .limit(data?.amount || data?.amount === 0 ? data.amount : 10)
       .sort(data.orderBy ? `-${data.orderBy}` : undefined)
       .select('-portfolio -__v -deleted')
       .exec();
@@ -143,10 +143,10 @@ export default class ApplyRepository {
 
   async updateApply(data: {
     _id: string;
-    document: Partial<ApplyInterface>;
-  }): Promise<ApplyInterface | null> {
+    document: Nullish<Partial<ApplyInterface>>;
+  }): Promise<void | null> {
     const apply = await Apply.findByIdAndUpdate(data._id, document);
-    return apply;
+    return apply ? undefined : null;
   }
 
   async deleteApply(data: { _id: string }): Promise<boolean> {
