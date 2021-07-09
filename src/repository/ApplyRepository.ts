@@ -118,10 +118,9 @@ export default class ApplyRepository {
     });
 
     const apply = await Apply.find(query)
-      .sort(`${data?.orderBy}`)
       .skip((data?.start || 1) - 1)
       .limit(data?.amount || data?.amount === 0 ? data.amount : 10)
-      .sort(data.orderBy ? `-${data.orderBy}` : undefined)
+      .sort(data.orderBy ? `${data.orderBy}` : undefined)
       .select('-portfolio -__v -deleted')
       .exec();
 
