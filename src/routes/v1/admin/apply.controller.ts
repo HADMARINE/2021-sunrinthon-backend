@@ -7,6 +7,7 @@ import {
   DataTypes,
   DeleteMapping,
   GetMapping,
+  PatchMapping,
   SetMiddleware,
   UseCustomHandler,
   WrappedRequest,
@@ -69,6 +70,24 @@ export default class AdminApplyController {
     });
   }
 
+  @PatchMapping(':id')
+  @SetMiddleware(AdminAuthority)
+  async patchPortfolio(req: WrappedRequest): Promise<null | void> {
+    const doc = req.verify.body({
+      studentId: DataTypes.stringNull,
+      name: DataTypes.stringNull,
+      teamName: DataTypes.stringNull,
+      position: DataTypes.stringNull,
+      clothSize: DataTypes.stringNull,
+      phoneNumber: DataTypes.stringNull,
+      field: DataTypes.stringNull,
+    })
+    const { id } = req.verify.params({ id: DataTypes.string })
+
+    return await applyRepository.updateApply({ _id: id, document: doc });
+  }
+
+
   @GetMapping('/portfolio/redirect/:id')
   @SetMiddleware(AdminAuthority)
   @UseCustomHandler
@@ -87,6 +106,7 @@ export default class AdminApplyController {
     if (!url) throw ErrorDictionary.db.notfound();
     return url;
   }
+
 
   @DeleteMapping(':id')
   @SetMiddleware(AdminAuthority)
