@@ -29,7 +29,20 @@ export default class TimeController {
       { type: 'market-start' },
       { $set: { value } },
       { upsert: true },
-    ).exec();
+    );
+  }
+
+  @PostMapping('/start/announce/team')
+  @SetMiddleware(AdminAuthority)
+  async announceTeamStartTime(req: WrappedRequest): Promise<void> {
+    const { value } = req.verify.body({ value: DataTypes.date });
+    await Time.findOneAndUpdate(
+      {
+        type: 'announce_team-start',
+      },
+      { $set: { value } },
+      { upsert: true },
+    );
   }
 
   @PostMapping('/end/hackathon')
@@ -43,7 +56,7 @@ export default class TimeController {
     );
   }
 
-  @PostMapping('/end/hackathon')
+  @PostMapping('/end/market')
   @SetMiddleware(AdminAuthority)
   async marketEndTime(req: WrappedRequest): Promise<void> {
     const { value } = req.verify.body({ value: DataTypes.date });
