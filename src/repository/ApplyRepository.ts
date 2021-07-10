@@ -18,11 +18,11 @@ export default class ApplyRepository {
     phoneNumber: string;
     field: string;
   }): Promise<boolean> {
-    const hackathonStart = await Time.findOne({ type: "hackathon-start" });
+    const hackathonStart = await Time.findOne({ type: 'hackathon-start' });
 
     if (hackathonStart) {
       if (Date.now() > hackathonStart.value.getTime()) {
-        throw ErrorDictionary.rule.timeExpired()
+        throw ErrorDictionary.rule.timeExpired();
       }
     }
 
@@ -39,13 +39,14 @@ export default class ApplyRepository {
     }
 
     let portResult;
-    const fileName = `${process.env.DB_ENV === 'development' ||
+    const fileName = `${
+      process.env.DB_ENV === 'development' ||
       process.env.NODE_ENV !== 'production'
-      ? 'development'
-      : 'production'
-      }/${moment().format(
-        `YYYY-MM-DD_HH_mm_ss`,
-      )}_${`${data.teamName}_${data.name}`.replace(/([/])/, '')}.pdf`;
+        ? 'development'
+        : 'production'
+    }/${moment().format(
+      `YYYY-MM-DD_HH_mm_ss`,
+    )}_${`${data.teamName}_${data.name}`.replace(/([/])/, '')}.pdf`;
     try {
       portResult = await Aws.S3.uploadAccelerate({
         Bucket: 'sunrinhackathon-bigfiles',
@@ -58,7 +59,10 @@ export default class ApplyRepository {
       throw ErrorDictionary.db.error();
     }
 
-    const existResult = await Apply.findOne({ studentId: data.studentId, name: data.name });
+    const existResult = await Apply.findOne({
+      studentId: data.studentId,
+      name: data.name,
+    });
 
     if (existResult) {
       await Apply.deleteById(existResult._id);
@@ -72,7 +76,7 @@ export default class ApplyRepository {
       portfolio: { Key: portResult.Key, Bucket: portResult.Bucket },
       clothSize: data.clothSize,
       phoneNumber: data.phoneNumber,
-      field: data.field
+      field: data.field,
     });
 
     return true;
@@ -114,7 +118,7 @@ export default class ApplyRepository {
       studentId: data.studentId,
       position: data.position,
       field: data.field,
-      phoneNumber: data.phoneNumber
+      phoneNumber: data.phoneNumber,
     });
 
     const apply = await Apply.find(query)
@@ -130,7 +134,7 @@ export default class ApplyRepository {
   }
 
   async getUniqueTeamName(): Promise<number> {
-    return (await Apply.find({}).distinct('teamName')).length
+    return (await Apply.find({}).distinct('teamName')).length;
   }
 
   async getPortfolioById(data: { _id: string }): Promise<string | null> {
@@ -148,7 +152,10 @@ export default class ApplyRepository {
     _id: string;
     document: Partial<Nullish<ApplyInterface>>;
   }): Promise<void | null> {
-    const apply = await Apply.findByIdAndUpdate(data._id, Assets.updateQueryBuilder(data.document));
+    const apply = await Apply.findByIdAndUpdate(
+      data._id,
+      Assets.updateQueryBuilder(data.document),
+    );
     return apply ? undefined : null;
   }
 
