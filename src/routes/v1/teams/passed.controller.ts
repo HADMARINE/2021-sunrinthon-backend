@@ -8,7 +8,7 @@ export default class PassedTeamsController {
   @GetMapping()
   async getPassedTeams(): Promise<{ game: string[]; living: string[] } | null> {
     const time = await Time.findOne({ type: 'announce_team-start' });
-    if (time.value.getTime() > Date.now()) {
+    if (time && time.value.getTime() > Date.now()) {
       throw ErrorDictionary.rule.apiNotYet();
     }
     const teams = await PassedTeams.find();
