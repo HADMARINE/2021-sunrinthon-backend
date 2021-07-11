@@ -22,7 +22,7 @@ export default class AdminPassedTeamsController {
 
   @DeleteMapping()
   async deletePassedTeams(req: WrappedRequest): Promise<void | null> {
-    const { name, field } = req.verify.params({
+    const { name, field } = req.verify.query({
       name: DataTypes.string,
       field: DataTypes.string,
     });
