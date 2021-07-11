@@ -1,15 +1,19 @@
 import PassedTeams from '@models/PassedTeams';
+import { AdminAuthority } from '@util/Middleware';
 import {
   Controller,
   DataTypes,
   DeleteMapping,
+  GetMapping,
   PostMapping,
+  SetMiddleware,
   WrappedRequest,
 } from 'express-quick-builder';
 
 @Controller
 export default class AdminPassedTeamsController {
   @GetMapping()
+  @SetMiddleware(AdminAuthority)
   async getPassedTeams(): Promise<{ game: string[]; living: string[] } | null> {
     const teams = await PassedTeams.find();
     if (!teams.length) {
@@ -31,7 +35,9 @@ export default class AdminPassedTeamsController {
 
     return result;
   }
+
   @PostMapping()
+  @SetMiddleware(AdminAuthority)
   async postPassedTeams(req: WrappedRequest): Promise<void> {
     const { field, name } = req.verify.body({
       field: DataTypes.string,
@@ -43,6 +49,7 @@ export default class AdminPassedTeamsController {
   }
 
   @DeleteMapping()
+  @SetMiddleware(AdminAuthority)
   async deletePassedTeams(req: WrappedRequest): Promise<void | null> {
     const { name, field } = req.verify.query({
       name: DataTypes.string,
