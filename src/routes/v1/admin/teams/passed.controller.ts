@@ -20,11 +20,14 @@ export default class AdminPassedTeamsController {
     return;
   }
 
-  @DeleteMapping(':id')
+  @DeleteMapping()
   async deletePassedTeams(req: WrappedRequest): Promise<void | null> {
-    const { id } = req.verify.params({ id: DataTypes.string });
+    const { name, field } = req.verify.params({
+      name: DataTypes.string,
+      field: DataTypes.string,
+    });
 
-    const result = await PassedTeams.findByIdAndDelete(id);
+    const result = await PassedTeams.findOneAndDelete({ name, field });
 
     return result ? undefined : null;
   }
