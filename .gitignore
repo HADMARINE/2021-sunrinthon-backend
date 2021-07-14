@@ -20,3 +20,4 @@ qcert.key
 .env
 .sshkey.pem
 rds-combined-ca-bundle.pem
+qcert.key
