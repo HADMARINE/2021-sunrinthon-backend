@@ -3,7 +3,7 @@ import { model, Schema, Document } from 'mongoose';
 export interface TimeInterface {
   type: string;
   value: Date;
-  label: string;
+  label: string | undefined;
 }
 
 const TimeSchema: Schema = new Schema({

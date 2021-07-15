@@ -37,7 +37,7 @@ export default class TimeController {
     const { type, value, label } = req.verify.body({
       type: DataTypes.string,
       value: DataTypes.date,
-      label: DataTypes.string,
+      label: DataTypes.stringNull,
     });
 
     await Time.findOneAndUpdate(
