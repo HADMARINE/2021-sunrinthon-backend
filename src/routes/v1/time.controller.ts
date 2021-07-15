@@ -1,15 +1,11 @@
 import Setting from '@models/Setting';
 import Time from '@models/Time';
-import {
-  Controller,
-  GetMapping,
-  SetSuccessMessage,
-} from 'express-quick-builder';
+import { Controller, DeprecatedSoon, GetMapping } from 'express-quick-builder';
 
 @Controller
 export default class AdminTimeController {
   @GetMapping('/start')
-  @SetSuccessMessage('This API will be deprecated soon. REPLACE NOW!')
+  @DeprecatedSoon
   async getAllStartTime(): Promise<{
     hackathon: Date;
     market: Date;
@@ -27,7 +23,7 @@ export default class AdminTimeController {
   }
 
   @GetMapping('/end')
-  @SetSuccessMessage('This API will be deprecated soon. REPLACE NOW!')
+  @DeprecatedSoon
   async getAllEndTime(): Promise<{ hackathon: Date; market: Date } | null> {
     const hackathon = await Time.findOne({ type: 'hackathon-end' }).exec();
     const market = await Time.findOne({ type: 'market-end' }).exec();
@@ -39,41 +35,41 @@ export default class AdminTimeController {
   }
 
   @GetMapping('/start/hackathon')
-  @SetSuccessMessage('This API will be deprecated soon. REPLACE NOW!')
+  @DeprecatedSoon
   async hackathonStartTime(): Promise<Date | null> {
     const time = await Time.findOne({ type: 'hackathon-start' }).exec();
     return time ? time.value : null;
   }
 
   @GetMapping('/start/market')
-  @SetSuccessMessage('This API will be deprecated soon. REPLACE NOW!')
+  @DeprecatedSoon
   async marketStartTime(): Promise<Date | null> {
     const time = await Time.findOne({ type: 'market-start' }).exec();
     return time ? time.value : null;
   }
 
   @GetMapping('/start/announce/team')
-  @SetSuccessMessage('This API will be deprecated soon. REPLACE NOW!')
+  @DeprecatedSoon
   async teamAnnounceStartTime(): Promise<Date | null> {
     const time = await Time.findOne({ type: 'announce_team-start' });
     return time ? time.value : null;
   }
 
   @GetMapping('/end/hackathon')
-  @SetSuccessMessage('This API will be deprecated soon. REPLACE NOW!')
+  @DeprecatedSoon
   async hackathonTime(): Promise<Date | null> {
     const time = await Time.findOne({ type: 'hackathon-end' }).exec();
     return time ? time.value : null;
   }
 
   @GetMapping('/end/market')
-  @SetSuccessMessage('This API will be deprecated soon. REPLACE NOW!')
+  @DeprecatedSoon
   async marketTime(): Promise<Date | null> {
     const time = await Time.findOne({ type: 'market-end' }).exec();
     return time ? time.value : null;
   }
 
-  @GetMapping()
+  @GetMapping('current')
   async getDisplayingTime(): Promise<Date | null> {
     const timeKey = await Setting.findOne({ key: 'time-display-key' });
     if (!timeKey) {

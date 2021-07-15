@@ -1,32 +1,33 @@
-import Time from '@models/Time';
+import Time, { TimeInterface } from '@models/Time';
 import { AdminAuthority } from '@util/Middleware';
 import {
   Controller,
   DataTypes,
+  DeleteMapping,
+  DeprecatedSoon,
   GetMapping,
   PostMapping,
   SetMiddleware,
-  SetSuccessMessage,
   WrappedRequest,
 } from 'express-quick-builder';
 
 @Controller
 export default class TimeController {
-  @GetMapping('list')
+  @GetMapping()
   @SetMiddleware(AdminAuthority)
-  async getTimeKeyList(): Promise<string[] | null> {
-    const result = (await Time.find()).map((doc) => doc.type);
+  async getTimeKeyList(): Promise<TimeInterface[] | null> {
+    const result = await Time.find().select('-__v');
     if (result.length === 0) return null;
     return result;
   }
 
   @GetMapping(':type')
   @SetMiddleware(AdminAuthority)
-  async getTimeValueByType(req: WrappedRequest): Promise<Date | null> {
+  async getTimeValueByType(req: WrappedRequest): Promise<TimeInterface | null> {
     const { type } = req.verify.params({ type: DataTypes.string });
     const time = await Time.findOne({ type });
     if (!time) return null;
-    return time.value;
+    return time;
   }
 
   // Find time value by key and update. if not exists, create new column with got value
@@ -46,9 +47,18 @@ export default class TimeController {
     );
   }
 
+  @DeleteMapping(':type')
+  @SetMiddleware(AdminAuthority)
+  async deleteByType(req: WrappedRequest): Promise<void | null> {
+    const { type } = req.verify.body({ type: DataTypes.string });
+    const time = await Time.findOneAndDelete({ type });
+    if (!time) return null;
+    return;
+  }
+
   @PostMapping('/start/hackathon')
   @SetMiddleware(AdminAuthority)
-  @SetSuccessMessage('This API will be deprecated soon. REPLACE NOW!')
+  @DeprecatedSoon
   async hackathonStartTime(req: WrappedRequest): Promise<void> {
     const { value } = req.verify.body({ value: DataTypes.date });
     await Time.findOneAndUpdate(
@@ -60,7 +70,7 @@ export default class TimeController {
 
   @PostMapping('/start/market')
   @SetMiddleware(AdminAuthority)
-  @SetSuccessMessage('This API will be deprecated soon. REPLACE NOW!')
+  @DeprecatedSoon
   async marketStartTime(req: WrappedRequest): Promise<void> {
     const { value } = req.verify.body({ value: DataTypes.date });
     await Time.findOneAndUpdate(
@@ -72,7 +82,7 @@ export default class TimeController {
 
   @PostMapping('/start/announce/team')
   @SetMiddleware(AdminAuthority)
-  @SetSuccessMessage('This API will be deprecated soon. REPLACE NOW!')
+  @DeprecatedSoon
   async announceTeamStartTime(req: WrappedRequest): Promise<void> {
     const { value } = req.verify.body({ value: DataTypes.date });
     await Time.findOneAndUpdate(
@@ -86,7 +96,7 @@ export default class TimeController {
 
   @PostMapping('/end/hackathon')
   @SetMiddleware(AdminAuthority)
-  @SetSuccessMessage('This API will be deprecated soon. REPLACE NOW!')
+  @DeprecatedSoon
   async hackathonEndTime(req: WrappedRequest): Promise<void> {
     const { value } = req.verify.body({ value: DataTypes.date });
     await Time.findOneAndUpdate(
@@ -98,7 +108,7 @@ export default class TimeController {
 
   @PostMapping('/end/market')
   @SetMiddleware(AdminAuthority)
-  @SetSuccessMessage('This API will be deprecated soon. REPLACE NOW!')
+  @DeprecatedSoon
   async marketEndTime(req: WrappedRequest): Promise<void> {
     const { value } = req.verify.body({ value: DataTypes.date });
     await Time.findOneAndUpdate(
