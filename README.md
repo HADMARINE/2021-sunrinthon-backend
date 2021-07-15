@@ -16,8 +16,6 @@
 
 ## 기타
 
-혹시 유지보수 하다가 막히는 부분 있으면 [contact@hadmarine.com](mailto:contact@hadmarine.com) 으로 연락 주세요. 친절 답변 해드리겠습니다 :)
+유지보수 하다가 막히는 부분이 있으면 [contact@hadmarine.com](mailto:contact@hadmarine.com) 으로 연락 주세요. 친절 답변 해드리겠습니다 :)
 
 ## TODO
-
-TODO : develop key manager
