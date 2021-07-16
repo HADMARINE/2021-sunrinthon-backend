@@ -3,7 +3,7 @@ import Aws from '@util/Aws';
 import { Controller, GetMapping } from 'express-quick-builder';
 
 @Controller
-class ScheduleController {
+export default class ScheduleController {
   @GetMapping()
   async getScheduleImage(): Promise<string | null> {
     const scheduleValue: string | undefined = (
