@@ -1,14 +1,15 @@
-import { model, Schema, Document, HookNextFunction, models } from 'mongoose';
-import error from '@error/ErrorDictionary';
+import { model, Schema, Document } from 'mongoose';
 
 export interface TimeInterface {
   type: string;
   value: Date;
+  label: string | undefined;
 }
 
 const TimeSchema: Schema = new Schema({
   type: { type: String, required: true },
   value: { type: Date, required: true },
+  label: { type: String, default: '' },
 });
 
 export interface TimeDocument extends Document, TimeInterface {}
