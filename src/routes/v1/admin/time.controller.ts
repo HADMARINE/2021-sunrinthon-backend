@@ -42,7 +42,7 @@ export default class TimeController {
 
     await Time.findOneAndUpdate(
       { type },
-      { $set: { value, label } },
+      { $set: { value, label: label || undefined } },
       { upsert: true },
     );
   }
@@ -50,7 +50,7 @@ export default class TimeController {
   @DeleteMapping(':type')
   @SetMiddleware(AdminAuthority)
   async deleteByType(req: WrappedRequest): Promise<void | null> {
-    const { type } = req.verify.body({ type: DataTypes.string });
+    const { type } = req.verify.params({ type: DataTypes.string });
     const time = await Time.findOneAndDelete({ type });
     if (!time) return null;
     return;
