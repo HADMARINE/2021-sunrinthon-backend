@@ -13,5 +13,5 @@ export default class ScheduleController {
     const schedule: { Key: string; Bucket: string } = JSON.parse(scheduleValue);
 
     return await Aws.S3.getSignedUrl({ ...schedule });
-  }
+  } 
 }
