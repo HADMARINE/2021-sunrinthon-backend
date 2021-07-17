@@ -65,8 +65,8 @@ const SERVER_STARTER_PROPERTIES = {
     process.env.NODE_ENV === 'production'
       ? true
       : process.env.PORT_STRICT === 'true'
-        ? true
-        : false,
+      ? true
+      : false,
   appName: packageJson.name,
 };
 
