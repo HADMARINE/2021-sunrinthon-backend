@@ -10,6 +10,7 @@ import {
   ReturnRawData,
   WrappedRequest,
   DataTypes,
+  SetDeprecated,
 } from 'express-quick-builder';
 import { dbConnectionStatus } from '@lib/startup/QuickMongoConnector';
 @Controller
@@ -39,8 +40,8 @@ export default class IndexController {
     };
   }
 
-  @PostMapping('/test')
-  test(req: WrappedRequest): void {
+  @PostMapping('/test/verifier')
+  testVerifier(req: WrappedRequest): void {
     const { obj, data } = req.verify.body({
       obj: DataTypes.array<any>(),
       data: {
@@ -49,6 +50,12 @@ export default class IndexController {
     });
 
     logger.debug(data.obj, false);
+  }
+
+  @PostMapping('/test/deprecated')
+  @SetDeprecated()
+  deprecatedTester(): void {
+    return;
   }
 
   @GetMapping('/info/time')
