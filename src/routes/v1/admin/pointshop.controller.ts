@@ -20,11 +20,16 @@ export default class PointshopController {
       description: DataTypes.string,
     });
 
-    await Pointshop.findOneAndUpdate(
-      { product },
-      { $set: { price, description } },
-      { upsert: true },
-    );
+    const findDoc = await Pointshop.findOne({ product });
+
+    if (findDoc) {
+      await Pointshop.findOneAndUpdate(
+        { product },
+        { $set: { price, description } },
+      );
+    } else {
+      await Pointshop.create({ product, price, description });
+    }
   }
 
   @DeleteMapping(':product')
