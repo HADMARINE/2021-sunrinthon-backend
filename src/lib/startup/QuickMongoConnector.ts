@@ -107,7 +107,7 @@ export default async function connectDB(): Promise<void> {
       return;
     }
 
-    await mongoose.connect(`${mongoURL}&retryWrites=false`, {
+    await mongoose.connect(`${mongoURL}&retrywrites=false`, {
       ...auth,
       dbName,
       useNewUrlParser: true,
