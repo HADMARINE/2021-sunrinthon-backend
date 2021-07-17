@@ -1,11 +1,16 @@
 import Setting from '@models/Setting';
 import Time from '@models/Time';
-import { Controller, DeprecatedSoon, GetMapping } from 'express-quick-builder';
+import {
+  Controller,
+  DeprecatedSoon,
+  GetMapping,
+  SetDeprecated,
+} from 'express-quick-builder';
 
 @Controller
 export default class AdminTimeController {
   @GetMapping('/start')
-  @DeprecatedSoon
+  @SetDeprecated()
   async getAllStartTime(): Promise<{
     hackathon: Date;
     market: Date;
@@ -23,7 +28,7 @@ export default class AdminTimeController {
   }
 
   @GetMapping('/end')
-  @DeprecatedSoon
+  @SetDeprecated()
   async getAllEndTime(): Promise<{ hackathon: Date; market: Date } | null> {
     const hackathon = await Time.findOne({ type: 'hackathon-end' }).exec();
     const market = await Time.findOne({ type: 'market-end' }).exec();
@@ -35,42 +40,43 @@ export default class AdminTimeController {
   }
 
   @GetMapping('/start/hackathon')
-  @DeprecatedSoon
   async hackathonStartTime(): Promise<Date | null> {
     const time = await Time.findOne({ type: 'hackathon-start' }).exec();
     return time ? time.value : null;
   }
 
   @GetMapping('/start/market')
-  @DeprecatedSoon
+  @SetDeprecated()
   async marketStartTime(): Promise<Date | null> {
     const time = await Time.findOne({ type: 'market-start' }).exec();
     return time ? time.value : null;
   }
 
   @GetMapping('/start/announce/team')
-  @DeprecatedSoon
   async teamAnnounceStartTime(): Promise<Date | null> {
     const time = await Time.findOne({ type: 'announce_team-start' });
     return time ? time.value : null;
   }
 
   @GetMapping('/end/hackathon')
-  @DeprecatedSoon
+  @SetDeprecated()
   async hackathonTime(): Promise<Date | null> {
     const time = await Time.findOne({ type: 'hackathon-end' }).exec();
     return time ? time.value : null;
   }
 
   @GetMapping('/end/market')
-  @DeprecatedSoon
+  @SetDeprecated()
   async marketTime(): Promise<Date | null> {
     const time = await Time.findOne({ type: 'market-end' }).exec();
     return time ? time.value : null;
   }
 
   @GetMapping('current')
-  async getDisplayingTime(): Promise<Date | null> {
+  async getDisplayingTime(): Promise<Nullish<{
+    value: Date;
+    label: string;
+  }> | null> {
     const timeKey = await Setting.findOne({ key: 'time-display-key' });
     if (!timeKey) {
       return null;
@@ -80,6 +86,6 @@ export default class AdminTimeController {
       return null;
     }
 
-    return time.value;
+    return { value: time.value, label: time.label };
   }
 }

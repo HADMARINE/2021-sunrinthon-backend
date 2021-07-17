@@ -3,13 +3,13 @@ import { model, Schema, Document } from 'mongoose';
 export interface TimeInterface {
   type: string;
   value: Date;
-  label: string | undefined;
+  label: string | null;
 }
 
 const TimeSchema: Schema = new Schema({
   type: { type: String, required: true },
   value: { type: Date, required: true },
-  label: { type: String, default: '' },
+  label: { type: String, default: null },
 });
 
 export interface TimeDocument extends Document, TimeInterface {}

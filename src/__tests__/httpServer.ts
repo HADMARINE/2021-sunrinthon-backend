@@ -25,11 +25,11 @@ describe('Server status tester', () => {
 
 describe('Request parameters validator test', () => {
   it('POST /test - truthy', async () => {
-    const res = await agent.post('/test').send({ obj: [1, 2, 3, 4] });
+    const res = await agent.post('/test/verifier').send({ obj: [1, 2, 3, 4] });
     expect(res.body.result).toBe(true);
   });
   it('POST /test - falsy', async () => {
-    const res = await agent.post('/test').send({ obj: 'FALSY TXT!' });
+    const res = await agent.post('/test/verifier').send({ obj: 'FALSY TXT!' });
     expect(res.body.result).toBe(false);
   });
 });
